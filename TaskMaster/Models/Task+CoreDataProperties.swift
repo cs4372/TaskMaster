@@ -1,0 +1,28 @@
+//
+//  Task+CoreDataProperties.swift
+//  TaskMaster
+//
+//  Created by Catherine Shing on 7/16/23.
+//
+//
+
+import Foundation
+import CoreData
+
+
+extension Task {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Task> {
+        return NSFetchRequest<Task>(entityName: "Task")
+    }
+
+    @NSManaged public var dueDate: Date?
+    @NSManaged public var isCompleted: Bool
+    @NSManaged public var taskColor: String?
+    @NSManaged public var title: String?
+
+}
+
+extension Task : Identifiable {
+
+}
