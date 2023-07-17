@@ -11,6 +11,7 @@ import PanModal
 class TaskViewController: UIViewController {
     
     private var taskViewModel: TaskViewModel!
+    private var addTaskViewModel: AddTaskViewModel!
     
     private let cellReuseIdentifier = "collectionCell"
     
@@ -33,7 +34,12 @@ class TaskViewController: UIViewController {
         view?.backgroundColor = .white
         setupUI()
         setupLayout()
-
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        taskViewModel.loadTasks()
     }
     
     private lazy var collectionView: UICollectionView = {
@@ -156,7 +162,15 @@ class TaskViewController: UIViewController {
     }
     
     @objc func addTask() {
-         let addTaskViewController = AddTaskViewController()
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let context = appDelegate.persistentContainer.viewContext
+        let addTaskViewModel = AddTaskViewModel(context: context)
+        addTaskViewModel.delegate = self
+
+        let addTaskViewController = AddTaskViewController(viewModel: addTaskViewModel)
          
          presentPanModal(addTaskViewController)
      }
@@ -165,7 +179,7 @@ class TaskViewController: UIViewController {
 
 extension TaskViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 15
+        return taskViewModel.numberOfTasks
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -188,4 +202,23 @@ extension TaskViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-
+extension TaskViewController: AddTaskViewDelegate {
+    func didAddTask(_ task: Task) {
+        taskViewModel.addTask(newTask: task)
+        print("inside TaskViewController add task")
+        taskViewModel.saveTasks()
+        collectionView.reloadData()
+//        tableView.reloadData()
+    }
+    
+    func didEditTask(_ task: Task) {
+        return
+    }
+    
+    func didSaveTask(_ task: Task) {
+//        taskViewModel.addTask(newTask: task)
+//        taskViewModel.saveTasks()
+//        collectionView.reloadData()
+////        tableView.reloadData()
+    }
+}
