@@ -7,7 +7,9 @@
 
 import UIKit
 
-class TaskViewModel {    
+class TaskViewModel {
+    weak var delegate: TaskViewVCDelegate?
+
     private var tasks: [Task] = []
     
     var numberOfTasks: Int {

@@ -1,0 +1,47 @@
+PODS:
+  - ChameleonFramework/Default (2.1.0)
+  - ChameleonFramework/Swift (2.1.0):
+    - ChameleonFramework/Default
+  - CLTypingLabel (0.4.0)
+  - FSCalendar (2.8.4)
+  - PanModal (1.2.7)
+  - SwiftLint (0.52.2)
+  - TextFieldEffects (1.6.0)
+
+DEPENDENCIES:
+  - ChameleonFramework/Swift (from `https://github.com/wowansm/Chameleon.git`, branch `swift5`)
+  - CLTypingLabel
+  - FSCalendar
+  - PanModal
+  - SwiftLint
+  - TextFieldEffects
+
+SPEC REPOS:
+  trunk:
+    - CLTypingLabel
+    - FSCalendar
+    - PanModal
+    - SwiftLint
+    - TextFieldEffects
+
+EXTERNAL SOURCES:
+  ChameleonFramework:
+    :branch: swift5
+    :git: https://github.com/wowansm/Chameleon.git
+
+CHECKOUT OPTIONS:
+  ChameleonFramework:
+    :commit: 96d52c36a45847fff60bcff7a58fec1e4bd7390b
+    :git: https://github.com/wowansm/Chameleon.git
+
+SPEC CHECKSUMS:
+  ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
+  CLTypingLabel: 95a7d1faf7e3d1d952cd11cb0491d17d80c50934
+  FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
+  PanModal: 3e16ead1a907fb06f4df3f13492fd00149fa4974
+  SwiftLint: 1ac76dac888ca05cb0cf24d0c85887ec1209961d
+  TextFieldEffects: 529b8aff706fb40f82c41c780c0777941a893796
+
+PODFILE CHECKSUM: 7491ebb5c41a0fcc9601c107d1975afae7746bf4
+
+COCOAPODS: 1.12.1

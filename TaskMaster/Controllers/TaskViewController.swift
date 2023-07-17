@@ -6,12 +6,22 @@
 //
 
 import UIKit
+import PanModal
 
 class TaskViewController: UIViewController {
     
     private var taskViewModel: TaskViewModel!
     
     private let cellReuseIdentifier = "collectionCell"
+    
+    init(taskViewModel: TaskViewModel) {
+        self.taskViewModel = taskViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     let rootStackView = UIStackView()
     let topStackView = UIStackView()
@@ -61,6 +71,23 @@ class TaskViewController: UIViewController {
         return segmentedControl
     }()
     
+    private lazy var addTaskButton: UIButton = {
+        let button = UIButton()
+        let buttonSize: CGFloat = 50.0
+        button.frame = CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize)
+        button.layer.cornerRadius = buttonSize / 2
+        button.clipsToBounds = true
+        button.backgroundColor = .blue
+        
+        let plusImage = UIImage(systemName: "plus")
+        button.setImage(plusImage, for: .normal)
+        button.tintColor = .white
+        
+        button.addTarget(self, action: #selector(addTask), for: .touchUpInside)
+        
+        return button
+    }()
+    
     private func setupUI() {
         rootStackView.translatesAutoresizingMaskIntoConstraints = false
         rootStackView.axis = .vertical
@@ -82,7 +109,7 @@ class TaskViewController: UIViewController {
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
                 
-        
+        addTaskButton.translatesAutoresizingMaskIntoConstraints = false
 
      }
     
@@ -94,6 +121,7 @@ class TaskViewController: UIViewController {
         topLeftStackView.addArrangedSubview(dateLabel)
         topStackView.addSubview(segmentedControl)
         rootStackView.addSubview(collectionView)
+        rootStackView.addSubview(addTaskButton)
 
         NSLayoutConstraint.activate([
             rootStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -117,22 +145,39 @@ class TaskViewController: UIViewController {
             segmentedControl.topAnchor.constraint(equalToSystemSpacingBelow: topStackView.topAnchor, multiplier: 2),
             topStackView.trailingAnchor.constraint(equalToSystemSpacingAfter: segmentedControl.trailingAnchor, multiplier: 2),
             topStackView.bottomAnchor.constraint(equalToSystemSpacingBelow: segmentedControl.bottomAnchor, multiplier: 5),
+            
+            rootStackView.bottomAnchor.constraint(equalToSystemSpacingBelow: addTaskButton.bottomAnchor, multiplier: 5),
+            rootStackView.trailingAnchor.constraint(equalToSystemSpacingAfter: addTaskButton.trailingAnchor, multiplier: 2),
+            addTaskButton.heightAnchor.constraint(equalToConstant: 50),
+            addTaskButton.widthAnchor.constraint(equalToConstant: 50)
+
         ])
         
     }
+    
+    @objc func addTask() {
+         let addTaskViewController = AddTaskViewController()
+         
+         presentPanModal(addTaskViewController)
+     }
+
 }
 
 extension TaskViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return 15
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseIdentifier, for: indexPath) as! TaskCollectionViewCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseIdentifier, for: indexPath) as? TaskCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        cell.taskLabel.text = "Abc"
 //
-//        let task = taskViewModel.task(at: indexPath.item)
-//        cell.setup(with: task)
-//
+//        let task = tasks[indexPath.item]
+//        let cellViewModel = TaskCellViewModel(task: task)
+//        cell.viewModel = cellViewModel
+        
         return cell
     }
 }
