@@ -9,7 +9,6 @@ import UIKit
 import PanModal
 
 class TaskViewController: UIViewController {
- 
     enum DisplayMode {
          case collection
          case list
@@ -43,14 +42,21 @@ class TaskViewController: UIViewController {
         setupUI()
         setupLayout()
         taskViewModel.loadTasks()
-        print("displayMode ==>", displayMode)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
         taskViewModel.loadTasks()
+        self.tableView.reloadData()
+        self.collectionView.reloadData()
     }
+    
+    lazy var dateFormatter: DateFormatter = {
+         let formatter = DateFormatter()
+         formatter.dateFormat = "yyyy-MM-dd"
+         return formatter
+     }()
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -65,7 +71,7 @@ class TaskViewController: UIViewController {
         let tableView = UITableView()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: tableCellReuseIdentifier)
+        tableView.register(TaskTableViewCell.self, forCellReuseIdentifier: tableCellReuseIdentifier)
         return tableView
     }()
     
@@ -213,7 +219,15 @@ class TaskViewController: UIViewController {
 
 extension TaskViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return taskViewModel.numberOfTasks
+        let tasksByDate = taskViewModel.tasksByDate
+        
+        if tasksByDate.isEmpty {
+            collectionView.setEmptyView(title: "You don't have any tasks yet!", message: "Click the + button to add some tasks")
+        } else {
+            collectionView.restore()
+        }
+        
+        return tasksByDate.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -235,24 +249,45 @@ extension TaskViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension TaskViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        let tasksByDate = taskViewModel.tasksByDate
+        
+        if tasksByDate.isEmpty {
+            tableView.setEmptyView(title: "You don't have any tasks yet!", message: "Click the + button to add some tasks")
+        } else {
+            tableView.restore()
+        }
+        
+        return tasksByDate.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return taskViewModel.numberOfTasks
+        return taskViewModel.numberOfTasksByDate(forSection: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: tableCellReuseIdentifier, for: indexPath)
-//        let task = taskViewModel.task(at: indexPath.item)
-//        let cellViewModel = TaskCellViewModel(task: task)
-//        print("task inside cellForItemAt ==>", task)
-//        cell.viewModel = cellViewModel
-        cell.textLabel?.text = "Row \(indexPath.row + 1)"
+        let tasksByDate = taskViewModel.tasksByDate
+        let cell = tableView.dequeueReusableCell(withIdentifier: tableCellReuseIdentifier, for: indexPath) as! TaskTableViewCell
+        let sectionDates = Array(tasksByDate.keys).sorted()
+        let sectionDateString = sectionDates[indexPath.section]
+        let tasksForSection = tasksByDate[sectionDateString]
+        
+        if let task = tasksForSection?[indexPath.row] {
+            print("tasl", task)
+            cell.setup(with: task)
+            cell.textLabel?.text = task.title
+        }
         return cell
+    }
+    
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return taskViewModel.getHeaderInSection(forSection: section)
     }
 }
 
 extension TaskViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Handle row selection
         print("Selected row: \(indexPath.row)")
     }
 }

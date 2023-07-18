@@ -21,13 +21,17 @@ class AddTaskViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private lazy var addTaskModalStackView: UIStackView = {
+    private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 20
         return stackView
     }()
     
     private lazy var dueDateStackView: UIStackView = {
         let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 10
         return stackView
     }()
     
@@ -40,6 +44,9 @@ class AddTaskViewController: UIViewController {
         textField.borderStyle = .roundedRect
         textField.layer.cornerRadius = 8
         textField.leftViewMode = .always
+        textField.clearButtonMode = .whileEditing
+        textField.autocapitalizationType = .none
+        textField.autocorrectionType = .no
         textField.returnKeyType = .done
 //        textField.delegate = self
         return textField
@@ -70,30 +77,21 @@ class AddTaskViewController: UIViewController {
         setupLayout()
     }
     
-    private func setupUI() {
-        addTaskModalStackView.translatesAutoresizingMaskIntoConstraints = false
-        addTaskModalStackView.axis = .vertical
-        addTaskModalStackView.spacing = 20
-        
-        dueDateStackView.translatesAutoresizingMaskIntoConstraints = false
-        dueDateStackView.axis = .horizontal
-        dueDateStackView.spacing = 10
-    }
-    
     private func setupLayout() {
-        view.addSubview(addTaskModalStackView)
+        view.addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stackView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 5),
+            stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 4),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 4),
+        ])
         
-        addTaskModalStackView.addArrangedSubview(searchTextField)
-        addTaskModalStackView.addArrangedSubview(dueDateStackView)
+        stackView.addArrangedSubview(searchTextField)
+        stackView.addArrangedSubview(dueDateStackView)
         dueDateStackView.addArrangedSubview(dueDateLabel)
         dueDateStackView.addArrangedSubview(dueDatePicker)
-        addTaskModalStackView.addArrangedSubview(saveButton)
-        
-        NSLayoutConstraint.activate([
-            addTaskModalStackView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 5),
-            addTaskModalStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 4),
-            view.trailingAnchor.constraint(equalToSystemSpacingAfter: addTaskModalStackView.trailingAnchor, multiplier: 4),
-        ])
+        stackView.addArrangedSubview(saveButton)
     }
     
     @objc private func saveTask() {
@@ -118,4 +116,3 @@ extension AddTaskViewController: PanModalPresentable {
         return .contentHeight(500)
     }
 }
-

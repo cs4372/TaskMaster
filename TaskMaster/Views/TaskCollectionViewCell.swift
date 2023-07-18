@@ -55,7 +55,7 @@ class TaskCollectionViewCell: UICollectionViewCell {
     private func setupUI() {
         
         LabelsStackView.axis = .vertical
-        LabelsStackView.spacing = 10
+        LabelsStackView.spacing = 1
         LabelsStackView.alignment = .leading
         contentView.backgroundColor = .orange
         contentView.layer.cornerRadius = 10
@@ -93,7 +93,6 @@ class TaskCollectionViewCell: UICollectionViewCell {
 //        taskLabel?.textColor = ContrastColorOf(color, returnFlat: true)
 //        dateLabel?.textColor = ContrastColorOf(color, returnFlat: true)
 //        backgroundColor = color
-        print("checkboxImageName ==>", checkboxImageName)
         let imageConfiguration = UIImage.SymbolConfiguration(pointSize: 25, weight: .medium, scale: .large)
         let image = UIImage(systemName: checkboxImageName, withConfiguration: imageConfiguration)
         checkboxButton.setImage(image, for: .normal)
