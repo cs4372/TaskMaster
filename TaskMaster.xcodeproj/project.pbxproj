@@ -23,6 +23,7 @@
 		476A11132A648F200021AA5F /* Task+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A11112A648F200021AA5F /* Task+CoreDataProperties.swift */; };
 		476A11152A64B2C90021AA5F /* TaskCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A11142A64B2C90021AA5F /* TaskCellViewModel.swift */; };
 		476A11172A64E2990021AA5F /* AddTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A11162A64E2990021AA5F /* AddTaskViewModel.swift */; };
+		476A111A2A66221B0021AA5F /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A11192A66221B0021AA5F /* DateHelper.swift */; };
 		4CED157484CFF68A9293D587 /* Pods_TaskMaster.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B37C8FB62C585B9A7EFF977 /* Pods_TaskMaster.framework */; };
 		F5A1207A165BBEAF7D4B5126 /* Pods_TaskMasterTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59097F76C8D0B3EBB23F4AAD /* Pods_TaskMasterTests.framework */; };
 		F89B4091A2B48BCF95E04E93 /* Pods_TaskMaster_TaskMasterUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D3FB1602EE7A20EDD2FFE8A /* Pods_TaskMaster_TaskMasterUITests.framework */; };
@@ -68,6 +69,7 @@
 		476A11112A648F200021AA5F /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Task+CoreDataProperties.swift"; path = "TaskMaster/Models/Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		476A11142A64B2C90021AA5F /* TaskCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCellViewModel.swift; sourceTree = "<group>"; };
 		476A11162A64E2990021AA5F /* AddTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewModel.swift; sourceTree = "<group>"; };
+		476A11192A66221B0021AA5F /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
 		59097F76C8D0B3EBB23F4AAD /* Pods_TaskMasterTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaskMasterTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		650DE2D92307B3A84FA687F6 /* Pods-TaskMaster-TaskMasterUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskMaster-TaskMasterUITests.release.xcconfig"; path = "Target Support Files/Pods-TaskMaster-TaskMasterUITests/Pods-TaskMaster-TaskMasterUITests.release.xcconfig"; sourceTree = "<group>"; };
 		7A4EEF6D25F6D213680EAF54 /* Pods-TaskMaster-TaskMasterUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskMaster-TaskMasterUITests.debug.xcconfig"; path = "Target Support Files/Pods-TaskMaster-TaskMasterUITests/Pods-TaskMaster-TaskMasterUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 		476A11082A648BD20021AA5F /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
+				476A11182A6622060021AA5F /* Helpers */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -213,6 +216,14 @@
 				476A110A2A648C3F0021AA5F /* TaskCollectionViewCell.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		476A11182A6622060021AA5F /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				476A11192A66221B0021AA5F /* DateHelper.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		F0C3B4B531CA5BECC5BDB6C7 /* Pods */ = {
@@ -475,6 +486,7 @@
 				476A110B2A648C3F0021AA5F /* TaskCollectionViewCell.swift in Sources */,
 				476A11172A64E2990021AA5F /* AddTaskViewModel.swift in Sources */,
 				476A10D52A6489170021AA5F /* SceneDelegate.swift in Sources */,
+				476A111A2A66221B0021AA5F /* DateHelper.swift in Sources */,
 				476A110F2A648E410021AA5F /* AddTaskViewController.swift in Sources */,
 				476A11152A64B2C90021AA5F /* TaskCellViewModel.swift in Sources */,
 			);

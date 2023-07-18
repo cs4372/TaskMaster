@@ -6,25 +6,33 @@
 //
 
 import UIKit
+import ChameleonFramework
 
 class TaskCollectionViewCell: UICollectionViewCell {
-    let taskLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        return label
+    
+    let LabelsStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.alignment = .center
+        stackView.axis = .vertical
+        return stackView
     }()
     
     private let dateLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 27, weight: .regular)
+        return label
+    }()
+    
+    let taskLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 21, weight: .regular)
         return label
     }()
     
     private let checkboxButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .white
         return button
     }()
     
@@ -45,43 +53,49 @@ class TaskCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupUI() {
+        
+        LabelsStackView.axis = .vertical
+        LabelsStackView.spacing = 10
+        LabelsStackView.alignment = .leading
         contentView.backgroundColor = .orange
         contentView.layer.cornerRadius = 10
         contentView.clipsToBounds = true
         
-        contentView.addSubview(taskLabel)
-        contentView.addSubview(dateLabel)
         contentView.addSubview(checkboxButton)
-        
-        // Add constraints for labels and button
-        
-        taskLabel.translatesAutoresizingMaskIntoConstraints = false
-        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(LabelsStackView)
+        LabelsStackView.addArrangedSubview(dateLabel)
+        LabelsStackView.addArrangedSubview(taskLabel)
+                
         checkboxButton.translatesAutoresizingMaskIntoConstraints = false
+        LabelsStackView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            taskLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            taskLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            taskLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            checkboxButton.topAnchor.constraint(equalToSystemSpacingBelow: contentView.topAnchor, multiplier: 2),
+            contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: checkboxButton.trailingAnchor, multiplier: 2),
             
-            dateLabel.topAnchor.constraint(equalTo: taskLabel.bottomAnchor, constant: 4),
-            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            
-            checkboxButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            checkboxButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            checkboxButton.widthAnchor.constraint(equalToConstant: 24),
-            checkboxButton.heightAnchor.constraint(equalToConstant: 24)
+            LabelsStackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            LabelsStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: contentView.leadingAnchor, multiplier: 2)
         ])
     }
     
     private func configureCell() {
         guard let viewModel = viewModel else { return }
         
-        taskLabel.text = "abc"
-//        taskLabel.text = viewModel.taskTitle
-//        dateLabel.text = viewModel.taskDueDate
+        taskLabel.text = viewModel.taskTitle
+        dateLabel.text = viewModel.taskDueDate
 //        contentView.backgroundColor = viewModel.taskColor
-//        checkboxButton.setImage(viewModel.checkboxImage, for: .normal)
+        let checkboxImageName = viewModel.task.isCompleted ? "checkmark.circle" : "circle"
+        
+//        guard let color = UIColor(hexString: viewModel.taskColor) else {
+//            return
+//        }
+//
+//        taskLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+//        dateLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+//        backgroundColor = color
+        print("checkboxImageName ==>", checkboxImageName)
+        let imageConfiguration = UIImage.SymbolConfiguration(pointSize: 25, weight: .medium, scale: .large)
+        let image = UIImage(systemName: checkboxImageName, withConfiguration: imageConfiguration)
+        checkboxButton.setImage(image, for: .normal)
     }
 }

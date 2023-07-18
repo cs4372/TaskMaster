@@ -34,6 +34,7 @@ class TaskViewController: UIViewController {
         view?.backgroundColor = .white
         setupUI()
         setupLayout()
+        taskViewModel.loadTasks()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -83,7 +84,7 @@ class TaskViewController: UIViewController {
         button.frame = CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize)
         button.layer.cornerRadius = buttonSize / 2
         button.clipsToBounds = true
-        button.backgroundColor = .blue
+        button.backgroundColor = .systemBlue
         
         let plusImage = UIImage(systemName: "plus")
         button.setImage(plusImage, for: .normal)
@@ -186,12 +187,11 @@ extension TaskViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseIdentifier, for: indexPath) as? TaskCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.taskLabel.text = "Abc"
-//
-//        let task = tasks[indexPath.item]
-//        let cellViewModel = TaskCellViewModel(task: task)
-//        cell.viewModel = cellViewModel
         
+        let task = taskViewModel.task(at: indexPath.item)
+        let cellViewModel = TaskCellViewModel(task: task)
+        print("task inside cellForItemAt ==>", task)
+        cell.viewModel = cellViewModel
         return cell
     }
 }

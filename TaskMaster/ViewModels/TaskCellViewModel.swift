@@ -7,23 +7,41 @@
 
 import UIKit
 
-struct TaskCellViewModel {
-    let taskTitle: String
-    let taskDueDate: String
-    let taskColor: UIColor
-    let checkboxImage: UIImage?
+class TaskCellViewModel {
+    let task: Task
     
-//    init() {
-//        taskTitle = task.title ?? "No Tasks Added Yet"
-//        taskDueDate = DateHelper.formattedDate(from: task.dueDate!)
-//        
+    var taskTitle: String {
+        return task.title ?? "No Tasks Added Yet"
+    }
+    
+    var taskDueDate: String {
+        return DateHelper.formattedDate(from: task.dueDate!)
+    }
+    
+    var taskColor: UIColor {
 //        guard let color = UIColor(hexString: task.taskColor) else {
-//            taskColor = .clear
-//            checkboxImage = nil
-//            return
+//            return .white
 //        }
-//
-//        taskColor = color
-//        checkboxImage = UIImage(systemName: task.isCompleted ? "checkmark.circle" : "circle")?.withTintColor(ContrastColorOf(color, returnFlat: true))
-//    }
+//        return color
+        return .orange
+    }
+    
+    var checkboxImage: UIImage? {
+        let checkboxImageName = task.isCompleted ? "checkmark.circle" : "circle"
+
+        print("checkboxImageName", checkboxImageName)
+        if let checkboxImage = UIImage(systemName: checkboxImageName) {
+            let imageSize = CGSize(width: 80, height: 80)
+            
+            let renderer = UIGraphicsImageRenderer(size: imageSize)
+            let resizedCheckboxImage = renderer.image { _ in
+                checkboxImage.draw(in: CGRect(origin: .zero, size: imageSize))
+            }
+        }
+        return UIImage(systemName: checkboxImageName)?.withTintColor(.white) ?? UIImage()
+    }
+    
+    init(task: Task) {
+        self.task = task
+    }
 }
