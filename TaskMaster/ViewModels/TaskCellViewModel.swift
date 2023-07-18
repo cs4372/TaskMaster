@@ -7,9 +7,16 @@
 
 import UIKit
 
+protocol TaskCellViewModelDelegate: AnyObject {
+    func toggleCheckbox(for viewModel: TaskCellViewModel)
+}
+
 class TaskCellViewModel {
     let task: Task
     
+    weak var delegate: TaskCellViewModelDelegate?
+    weak var taskViewModel: TaskViewModel?
+
     var taskTitle: String {
         return task.title ?? "No Tasks Added Yet"
     }
@@ -30,18 +37,88 @@ class TaskCellViewModel {
         let checkboxImageName = task.isCompleted ? "checkmark.circle" : "circle"
 
         print("checkboxImageName", checkboxImageName)
-        if let checkboxImage = UIImage(systemName: checkboxImageName) {
-            let imageSize = CGSize(width: 80, height: 80)
-            
-            let renderer = UIGraphicsImageRenderer(size: imageSize)
-            let resizedCheckboxImage = renderer.image { _ in
-                checkboxImage.draw(in: CGRect(origin: .zero, size: imageSize))
-            }
-        }
-        return UIImage(systemName: checkboxImageName)?.withTintColor(.white) ?? UIImage()
+        let imageConfiguration = UIImage.SymbolConfiguration(pointSize: 25, weight: .medium, scale: .large)
+        let image = UIImage(systemName: checkboxImageName, withConfiguration: imageConfiguration)
+        return image
     }
     
     init(task: Task) {
         self.task = task
     }
-}
+    
+    
+     func toggleCheckbox() {
+//         task.isCompleted.toggle()
+         delegate?.toggleCheckbox(for: self)
+//         print("toggle")
+         task.isCompleted.toggle()
+         taskViewModel?.saveTasks()
+         print("task isCompleted", task.isCompleted)
+     }
+    
+    func createContextMenuConfiguration(for indexPath: IndexPath) -> UIContextMenuConfiguration? {
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let editAction = self.createEditAction(for: indexPath)
+            let deleteAction = self.createDeleteAction(for: indexPath)
+            
+            return UIMenu(title: "", children: [editAction, deleteAction])
+        }
+        
+        return configuration
+    }
+    
+    private func createEditAction(for indexPath: IndexPath) -> UIAction {
+        let editAction = UIAction(title: "Edit", image: UIImage(systemName: "pencil")) { [weak self] _ in
+            guard let self = self else { return }
+//
+//            if self.tasks?[indexPath.row] != nil {
+//                let addTaskCV = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddTaskViewController") as! AddTaskViewController
+//                let task = self.tasks?[indexPath.row]
+//                addTaskCV.delegate = self
+//
+//                if let currentTask = task {
+//                    addTaskCV.editTask = currentTask
+//                }
+//
+//                self.presentPanModal(addTaskCV)
+//            }
+        }
+//
+        return editAction
+    }
+    
+    private func createDeleteAction(for indexPath: IndexPath) -> UIAction {
+        let deleteAction = UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
+            guard let self = self else { return }
+            
+//            if let deleteItem = self.tasks?[indexPath.row] {
+//                guard let dueDate = deleteItem.dueDate else { return }
+//                
+//                let dateString = DateHelper.formattedFullDate(from: dueDate)
+                
+                //                if var tasksOnDueDate = tasksByDate[dateString] {
+                //                    if let taskIndex = tasksOnDueDate.firstIndex(of: deleteItem) {
+                //                        tasksOnDueDate.remove(at: taskIndex)
+                //                        tasksByDate[dateString] = tasksOnDueDate
+                //
+                //                        if tasksOnDueDate.isEmpty {
+                //                            tasksByDate.removeValue(forKey: dateString)
+                //                        }
+                //                    }
+                //                }
+                //
+                //                self.context.delete(deleteItem)
+                //                self.tasks?.remove(at: indexPath.row)
+                //                self.saveTasks()
+                //                if let tasks = tasks {
+                //                    DataManager.shared.groupTasksByDate(tasks: tasks)
+                //                }
+                //                self.collectionView.reloadData()
+                //                self.tableView.reloadData()
+                //            }
+            }
+            
+            return deleteAction
+        }
+    }
+

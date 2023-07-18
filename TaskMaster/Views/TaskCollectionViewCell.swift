@@ -38,6 +38,7 @@ class TaskCollectionViewCell: UICollectionViewCell {
     
     var viewModel: TaskCellViewModel? {
         didSet {
+            checkboxButton.setImage(viewModel?.checkboxImage, for: .normal)
             configureCell()
         }
     }
@@ -78,13 +79,14 @@ class TaskCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    private func configureCell() {
+     func configureCell() {
         guard let viewModel = viewModel else { return }
         
         taskLabel.text = viewModel.taskTitle
         dateLabel.text = viewModel.taskDueDate
 //        contentView.backgroundColor = viewModel.taskColor
         let checkboxImageName = viewModel.task.isCompleted ? "checkmark.circle" : "circle"
+        print("checkboxImageName ==>", checkboxImageName)
         
 //        guard let color = UIColor(hexString: viewModel.taskColor) else {
 //            return
@@ -96,5 +98,10 @@ class TaskCollectionViewCell: UICollectionViewCell {
         let imageConfiguration = UIImage.SymbolConfiguration(pointSize: 25, weight: .medium, scale: .large)
         let image = UIImage(systemName: checkboxImageName, withConfiguration: imageConfiguration)
         checkboxButton.setImage(image, for: .normal)
+        checkboxButton.addTarget(self, action: #selector(toggleCheckbox), for: .touchUpInside)
     }
+    
+    @objc private func toggleCheckbox() {
+           viewModel?.toggleCheckbox()
+       }
 }

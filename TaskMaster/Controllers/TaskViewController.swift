@@ -215,6 +215,10 @@ class TaskViewController: UIViewController {
         collectionView.isHidden = displayMode == .list
         tableView.isHidden = displayMode == .collection
     }
+    
+    func toggleCheckbox(for viewModel: TaskCellViewModel) {
+        collectionView.reloadData()
+    }
 }
 
 extension TaskViewController: UICollectionViewDataSource {
@@ -237,9 +241,32 @@ extension TaskViewController: UICollectionViewDataSource {
         
         let task = taskViewModel.task(at: indexPath.item)
         let cellViewModel = TaskCellViewModel(task: task)
+        print("tasl in cell for ", task)
+        cellViewModel.delegate = self
         cell.viewModel = cellViewModel
+
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let task = taskViewModel.task(at: indexPath.item)
+        let cellViewModel = TaskCellViewModel(task: task)
+          return cellViewModel.createContextMenuConfiguration(for: indexPath)
+      }
+      
+    
+//    @objc private func toggleCheckbox(_ sender: UIButton) {
+//        guard let cell = sender.superview?.superview as? TaskCollectionViewCell,
+//              let indexPath = collectionView.indexPath(for: cell) else {
+//            return
+//        }
+//        
+//        let task = taskViewModel.task(at: indexPath.item)
+//        let cellViewModel = TaskCellViewModel(task: task)
+//        cellViewModel.toggleCheckbox()
+//        
+//        collectionView.reloadData()
+//    }
 }
 
 extension TaskViewController: UICollectionViewDelegateFlowLayout {
@@ -310,5 +337,14 @@ extension TaskViewController: AddTaskViewDelegate {
 //        taskViewModel.saveTasks()
 //        collectionView.reloadData()
 ////        tableView.reloadData()
+    }
+}
+
+extension TaskViewController: TaskCellViewModelDelegate {
+    func toggleCheckbox(for cell: TaskCollectionViewCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        let task = taskViewModel.task(at: indexPath.item)
+        taskViewModel.saveTasks()
+        collectionView.reloadData()
     }
 }

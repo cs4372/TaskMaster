@@ -16,11 +16,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         
         let taskViewModel = TaskViewModel(context: persistentContainer.viewContext)
-
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window?.makeKeyAndVisible()
         
-        window?.rootViewController = TaskViewController(taskViewModel: taskViewModel)
+        let tabBarController = UITabBarController()
+        
+        let TaskViewController = TaskViewController(taskViewModel: taskViewModel)
+        TaskViewController.tabBarItem.title = "Tasks"
+        TaskViewController.tabBarItem.image = UIImage(systemName: "list.bullet.clipboard")
+        
+        let CalendarViewController = CalendarViewController()
+        CalendarViewController.tabBarItem.title = "Calendar"
+        CalendarViewController.tabBarItem.image = UIImage(systemName: "calendar")
+        
+        let CompletedTasksViewController = CompletedTasksViewController()
+        CompletedTasksViewController.tabBarItem.title = "Completed Tasks"
+        CompletedTasksViewController.tabBarItem.image = UIImage(systemName: "checkmark.icloud")
+        
+        tabBarController.viewControllers = [TaskViewController, CalendarViewController, CompletedTasksViewController]
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.rootViewController = tabBarController
+        window?.makeKeyAndVisible()
         
         return true
     }
