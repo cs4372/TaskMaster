@@ -21,17 +21,13 @@ class AddTaskViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private lazy var stackView: UIStackView = {
+    private lazy var addTaskModalStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = 20
         return stackView
     }()
     
     private lazy var dueDateStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 10
         return stackView
     }()
     
@@ -44,9 +40,6 @@ class AddTaskViewController: UIViewController {
         textField.borderStyle = .roundedRect
         textField.layer.cornerRadius = 8
         textField.leftViewMode = .always
-        textField.clearButtonMode = .whileEditing
-        textField.autocapitalizationType = .none
-        textField.autocorrectionType = .no
         textField.returnKeyType = .done
 //        textField.delegate = self
         return textField
@@ -77,21 +70,30 @@ class AddTaskViewController: UIViewController {
         setupLayout()
     }
     
-    private func setupLayout() {
-        view.addSubview(stackView)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stackView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 5),
-            stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 4),
-            view.trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 4),
-        ])
+    private func setupUI() {
+        addTaskModalStackView.translatesAutoresizingMaskIntoConstraints = false
+        addTaskModalStackView.axis = .vertical
+        addTaskModalStackView.spacing = 20
         
-        stackView.addArrangedSubview(searchTextField)
-        stackView.addArrangedSubview(dueDateStackView)
+        dueDateStackView.translatesAutoresizingMaskIntoConstraints = false
+        dueDateStackView.axis = .horizontal
+        dueDateStackView.spacing = 10
+    }
+    
+    private func setupLayout() {
+        view.addSubview(addTaskModalStackView)
+        
+        addTaskModalStackView.addArrangedSubview(searchTextField)
+        addTaskModalStackView.addArrangedSubview(dueDateStackView)
         dueDateStackView.addArrangedSubview(dueDateLabel)
         dueDateStackView.addArrangedSubview(dueDatePicker)
-        stackView.addArrangedSubview(saveButton)
+        addTaskModalStackView.addArrangedSubview(saveButton)
+        
+        NSLayoutConstraint.activate([
+            addTaskModalStackView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 5),
+            addTaskModalStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 4),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: addTaskModalStackView.trailingAnchor, multiplier: 4),
+        ])
     }
     
     @objc private func saveTask() {

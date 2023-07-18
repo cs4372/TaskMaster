@@ -15,6 +15,7 @@ protocol AddTaskViewDelegate: AnyObject {
 
 class AddTaskViewModel {
     
+    var editTask: Task?
     weak var delegate: AddTaskViewDelegate?
     
     private let context: NSManagedObjectContext
@@ -27,6 +28,8 @@ class AddTaskViewModel {
         let newTask = Task(context: context)
         newTask.title = title
         newTask.dueDate = dueDate
+        newTask.isCompleted = false
+
         print("new Task", newTask)
         
         do {

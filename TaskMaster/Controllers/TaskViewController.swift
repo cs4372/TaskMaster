@@ -9,11 +9,19 @@ import UIKit
 import PanModal
 
 class TaskViewController: UIViewController {
+ 
+    enum DisplayMode {
+         case collection
+         case list
+     }
+     
+    var displayMode: DisplayMode = .collection
     
     private var taskViewModel: TaskViewModel!
     private var addTaskViewModel: AddTaskViewModel!
     
-    private let cellReuseIdentifier = "collectionCell"
+    private let collectionCellReuseIdentifier = "collectionCell"
+    private let tableCellReuseIdentifier = "tableCell"
     
     init(taskViewModel: TaskViewModel) {
         self.taskViewModel = taskViewModel
@@ -31,10 +39,11 @@ class TaskViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view?.backgroundColor = .white
+        updateViews()
         setupUI()
         setupLayout()
         taskViewModel.loadTasks()
+        print("displayMode ==>", displayMode)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -45,12 +54,19 @@ class TaskViewController: UIViewController {
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        // Configure layout properties
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(TaskCollectionViewCell.self, forCellWithReuseIdentifier: cellReuseIdentifier)
+        collectionView.register(TaskCollectionViewCell.self, forCellWithReuseIdentifier: collectionCellReuseIdentifier)
         return collectionView
+    }()
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: tableCellReuseIdentifier)
+        return tableView
     }()
     
     private lazy var nameLabel: UILabel = {
@@ -71,7 +87,7 @@ class TaskViewController: UIViewController {
     
     private lazy var segmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl()
-//        segmentedControl.addTarget(self, action: #selector(viewTypeChanged(_:)), for: .valueChanged)
+        segmentedControl.addTarget(self, action: #selector(viewTypeChanged(_:)), for: .valueChanged)
         segmentedControl.insertSegment(withTitle: "Tile", at: 0, animated: false)
         segmentedControl.insertSegment(withTitle: "List", at: 1, animated: false)
         segmentedControl.selectedSegmentIndex = 0
@@ -96,6 +112,8 @@ class TaskViewController: UIViewController {
     }()
     
     private func setupUI() {
+        view.backgroundColor = .white
+
         rootStackView.translatesAutoresizingMaskIntoConstraints = false
         rootStackView.axis = .vertical
         topStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -103,21 +121,15 @@ class TaskViewController: UIViewController {
         topStackView.translatesAutoresizingMaskIntoConstraints = false
         topStackView.axis = .horizontal
         topStackView.spacing = 10
-//        alignment = .top
         
         topLeftStackView.translatesAutoresizingMaskIntoConstraints = false
         topLeftStackView.axis = .vertical
         topLeftStackView.spacing = 5
         
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        dateLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-                
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         addTaskButton.translatesAutoresizingMaskIntoConstraints = false
-
      }
     
     private func setupLayout() {
@@ -128,6 +140,7 @@ class TaskViewController: UIViewController {
         topLeftStackView.addArrangedSubview(dateLabel)
         topStackView.addSubview(segmentedControl)
         rootStackView.addSubview(collectionView)
+        rootStackView.addSubview(tableView)
         rootStackView.addSubview(addTaskButton)
 
         NSLayoutConstraint.activate([
@@ -148,6 +161,11 @@ class TaskViewController: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: rootStackView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: rootStackView.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: rootStackView.bottomAnchor),
+            
+            tableView.topAnchor.constraint(equalToSystemSpacingBelow: topStackView.bottomAnchor, multiplier: 2),
+            tableView.leadingAnchor.constraint(equalTo: rootStackView.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: rootStackView.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: rootStackView.bottomAnchor),
 
             segmentedControl.topAnchor.constraint(equalToSystemSpacingBelow: topStackView.topAnchor, multiplier: 2),
             topStackView.trailingAnchor.constraint(equalToSystemSpacingAfter: segmentedControl.trailingAnchor, multiplier: 2),
@@ -157,7 +175,6 @@ class TaskViewController: UIViewController {
             rootStackView.trailingAnchor.constraint(equalToSystemSpacingAfter: addTaskButton.trailingAnchor, multiplier: 2),
             addTaskButton.heightAnchor.constraint(equalToConstant: 50),
             addTaskButton.widthAnchor.constraint(equalToConstant: 50)
-
         ])
         
     }
@@ -175,7 +192,23 @@ class TaskViewController: UIViewController {
          
          presentPanModal(addTaskViewController)
      }
-
+    
+    @IBAction func viewTypeChanged(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            displayMode = .collection
+        case 1:
+            displayMode = .list
+        default:
+            break
+        }
+        updateViews()
+    }
+    
+    private func updateViews() {
+        collectionView.isHidden = displayMode == .list
+        tableView.isHidden = displayMode == .collection
+    }
 }
 
 extension TaskViewController: UICollectionViewDataSource {
@@ -184,13 +217,12 @@ extension TaskViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseIdentifier, for: indexPath) as? TaskCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellReuseIdentifier, for: indexPath) as? TaskCollectionViewCell else {
             return UICollectionViewCell()
         }
         
         let task = taskViewModel.task(at: indexPath.item)
         let cellViewModel = TaskCellViewModel(task: task)
-        print("task inside cellForItemAt ==>", task)
         cell.viewModel = cellViewModel
         return cell
     }
@@ -199,6 +231,29 @@ extension TaskViewController: UICollectionViewDataSource {
 extension TaskViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 180, height: 200)
+    }
+}
+
+extension TaskViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return taskViewModel.numberOfTasks
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: tableCellReuseIdentifier, for: indexPath)
+//        let task = taskViewModel.task(at: indexPath.item)
+//        let cellViewModel = TaskCellViewModel(task: task)
+//        print("task inside cellForItemAt ==>", task)
+//        cell.viewModel = cellViewModel
+        cell.textLabel?.text = "Row \(indexPath.row + 1)"
+        return cell
+    }
+}
+
+extension TaskViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Handle row selection
+        print("Selected row: \(indexPath.row)")
     }
 }
 

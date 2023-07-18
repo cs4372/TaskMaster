@@ -9,6 +9,7 @@ import UIKit
 import CoreData
 
 class TaskViewModel {
+    
     private let context: NSManagedObjectContext
     private var tasks: [Task] = []
     
