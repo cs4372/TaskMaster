@@ -59,12 +59,14 @@ class EmptyViewHelper {
     }
     
     private static func setupConstraints(for titleLabel: UILabel, _ messageLabel: UILabel, in emptyView: UIView) {
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
-            titleLabel.centerYAnchor.constraint(equalTo: emptyView.centerYAnchor, constant: -80),
             titleLabel.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor),
-            messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            messageLabel.leadingAnchor.constraint(equalTo: emptyView.leadingAnchor, constant: 20),
-            messageLabel.trailingAnchor.constraint(equalTo: emptyView.trailingAnchor, constant: -20)
+            titleLabel.topAnchor.constraint(equalToSystemSpacingBelow: emptyView.topAnchor, multiplier: 6),
+            messageLabel.topAnchor.constraint(equalToSystemSpacingBelow: titleLabel.bottomAnchor, multiplier: 2),
+            messageLabel.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor),
         ])
     }
 }

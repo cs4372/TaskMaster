@@ -84,6 +84,7 @@ class TaskCollectionViewCell: UICollectionViewCell {
     }
     
      func configureCell() {
+        print("inside configure cell")
         guard let viewModel = viewModel else { return }
         
         taskLabel.text = viewModel.taskTitle

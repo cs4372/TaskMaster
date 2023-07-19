@@ -19,24 +19,31 @@ class AddTaskViewModel {
     weak var delegate: AddTaskViewDelegate?
     
     private let context: NSManagedObjectContext
-     
-     init(context: NSManagedObjectContext) {
-         self.context = context
-     }
+    
+    init(context: NSManagedObjectContext) {
+        self.context = context
+    }
     
     func saveTask(title: String, dueDate: Date) {
-        let newTask = Task(context: context)
-        newTask.title = title
-        newTask.dueDate = dueDate
-        newTask.isCompleted = false
-
-        print("new Task", newTask)
-        
-        do {
-            try context.save()
-            delegate?.didAddTask(newTask)
-        } catch {
-            print("Error saving task: \(error)")
+        if let task = editTask {
+            task.title = title
+            task.dueDate = dueDate
+            delegate?.didEditTask(task)
+        } else {
+            let newTask = Task(context: context)
+            newTask.title = title
+            newTask.dueDate = dueDate
+            //               let color = RandomFlatColorWithShade(.light)
+            //               let lightenedColor = color.lighten(byPercentage: 0.3)
+            //               newTask.taskColor = (lightenedColor?.hexValue())!
+            newTask.isCompleted = false
+            
+            do {
+                try context.save()
+                delegate?.didAddTask(newTask)
+            } catch {
+                print("Error saving task: \(error)")
+            }
         }
     }
 }

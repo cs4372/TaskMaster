@@ -10,10 +10,10 @@ import PanModal
 
 class AddTaskViewController: UIViewController {
     weak var delegate: AddTaskViewDelegate?
-    var viewModel: AddTaskViewModel
+    var addTaskViewModel: AddTaskViewModel
     
     init(viewModel: AddTaskViewModel) {
-        self.viewModel = viewModel
+        self.addTaskViewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -48,7 +48,6 @@ class AddTaskViewController: UIViewController {
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
         textField.returnKeyType = .done
-//        textField.delegate = self
         return textField
     }()
     
@@ -75,7 +74,16 @@ class AddTaskViewController: UIViewController {
     override func viewDidLoad() {
         self.view.backgroundColor = .white
         setupLayout()
+        if let editTask = addTaskViewModel.editTask {
+            dueDatePicker.date = editTask.dueDate!
+            searchTextField.text = editTask.title!
+        }
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+         super.viewDidAppear(animated)
+         searchTextField.becomeFirstResponder()
+     }
     
     private func setupLayout() {
         view.addSubview(stackView)
@@ -100,9 +108,16 @@ class AddTaskViewController: UIViewController {
           }
           
           let dueDate = dueDatePicker.date
-          viewModel.saveTask(title: title, dueDate: dueDate)
+          addTaskViewModel.saveTask(title: title, dueDate: dueDate)
           dismiss(animated: true, completion: nil)
       }
+}
+
+extension AddTaskViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let newText = (textField.text as NSString?)?.replacingCharacters(in: range, with: string) ?? string
+        return newText.count <= 30
+    }
 }
 
 // MARK: PanModalPresentable

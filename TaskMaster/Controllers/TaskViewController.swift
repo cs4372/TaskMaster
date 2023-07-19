@@ -38,6 +38,7 @@ class TaskViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        taskViewModel.delegate = self
         updateViews()
         setupUI()
         setupLayout()
@@ -48,6 +49,7 @@ class TaskViewController: UIViewController {
         super.viewDidAppear(true)
         
         taskViewModel.loadTasks()
+        taskViewModel.groupTasksByDate()
         self.tableView.reloadData()
         self.collectionView.reloadData()
     }
@@ -215,23 +217,17 @@ class TaskViewController: UIViewController {
         collectionView.isHidden = displayMode == .list
         tableView.isHidden = displayMode == .collection
     }
-    
-    func toggleCheckbox(for viewModel: TaskCellViewModel) {
-        collectionView.reloadData()
-    }
 }
 
 extension TaskViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let tasksByDate = taskViewModel.tasksByDate
-        
-        if tasksByDate.isEmpty {
+        if taskViewModel.numberOfTasks == 0 {
             collectionView.setEmptyView(title: "You don't have any tasks yet!", message: "Click the + button to add some tasks")
         } else {
             collectionView.restore()
         }
         
-        return tasksByDate.count
+        return taskViewModel.numberOfTasks
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -249,9 +245,7 @@ extension TaskViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        let task = taskViewModel.task(at: indexPath.item)
-        let cellViewModel = TaskCellViewModel(task: task)
-          return cellViewModel.createContextMenuConfiguration(for: indexPath)
+          return taskViewModel.createContextMenuConfiguration(for: indexPath)
       }
 }
 
@@ -264,7 +258,7 @@ extension TaskViewController: UICollectionViewDelegateFlowLayout {
 extension TaskViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         let tasksByDate = taskViewModel.tasksByDate
-        
+        print("tasksByDate ==>", tasksByDate)
         if tasksByDate.isEmpty {
             tableView.setEmptyView(title: "You don't have any tasks yet!", message: "Click the + button to add some tasks")
         } else {
@@ -297,6 +291,10 @@ extension TaskViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return taskViewModel.getHeaderInSection(forSection: section)
     }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        return taskViewModel.swipeActionsConfiguration(for: indexPath)
+    }
 }
 
 extension TaskViewController: UITableViewDelegate {
@@ -310,8 +308,6 @@ extension TaskViewController: AddTaskViewDelegate {
         taskViewModel.addTask(newTask: task)
         print("inside TaskViewController add task")
         taskViewModel.saveTasks()
-        collectionView.reloadData()
-//        tableView.reloadData()
     }
     
     func didEditTask(_ task: Task) {
@@ -332,7 +328,19 @@ extension TaskViewController: TaskCellDelegate {
         let task = taskViewModel.task(at: indexPath.item)
         task.isCompleted.toggle()
         taskViewModel.saveTasks()
-
         collectionView.reloadData()
     }
 }
+
+extension TaskViewController: TaskViewModelDelegate {
+    func presentAddTaskVC(with viewModel: AddTaskViewModel) {
+        let addTaskViewController = AddTaskViewController(viewModel: viewModel)
+        
+        presentPanModal(addTaskViewController)
+    }
+    
+    func reloadData() {
+         collectionView.reloadData()
+         tableView.reloadData()
+     }
+ }
