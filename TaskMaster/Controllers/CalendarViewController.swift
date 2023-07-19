@@ -10,6 +10,17 @@ import FSCalendar
 
 class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendarDelegate {
         
+    var calendarViewModel: CalendarViewModel
+    
+    init(calendarViewModel: CalendarViewModel) {
+        self.calendarViewModel = calendarViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private lazy var calendarView: FSCalendar = {
         calendarView = FSCalendar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 300))
         calendarView.dataSource = self
@@ -29,6 +40,8 @@ class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendar
         super.viewDidLoad()
         
         view.backgroundColor = .white
+        
+        calendarViewModel.reloadData()
         
         setupLayout()
     }
@@ -59,15 +72,12 @@ class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendar
     // MARK: - FSCalendarDelegate
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        // Handle date selection
+        return calendarViewModel.getSelectedDateTasks(date: date)
     }
     
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        // Return the number of events for a specific date
-        return 0
+        return calendarViewModel.getNumberOfEventsByDate(date: date)
     }
-    
-    // Other FSCalendarDelegate and FSCalendarDataSource methods...
 }
 
 
@@ -84,6 +94,6 @@ extension CalendarViewController: UITableViewDataSource {
 }
 
 extension CalendarViewController: UITableViewDelegate {
-    
+
 }
-    
+

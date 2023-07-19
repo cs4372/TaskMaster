@@ -7,14 +7,14 @@
 
 import UIKit
 
-protocol TaskCellViewModelDelegate: AnyObject {
-    func toggleCheckbox(for viewModel: TaskCellViewModel)
+protocol TaskCellDelegate: AnyObject {
+    func didToggleCheckbox(for cell: TaskCollectionViewCell)
 }
 
 class TaskCellViewModel {
     let task: Task
     
-    weak var delegate: TaskCellViewModelDelegate?
+//    weak var delegate: TaskCellViewModelDelegate?
     weak var taskViewModel: TaskViewModel?
 
     var taskTitle: String {
@@ -36,7 +36,6 @@ class TaskCellViewModel {
     var checkboxImage: UIImage? {
         let checkboxImageName = task.isCompleted ? "checkmark.circle" : "circle"
 
-        print("checkboxImageName", checkboxImageName)
         let imageConfiguration = UIImage.SymbolConfiguration(pointSize: 25, weight: .medium, scale: .large)
         let image = UIImage(systemName: checkboxImageName, withConfiguration: imageConfiguration)
         return image
@@ -45,16 +44,6 @@ class TaskCellViewModel {
     init(task: Task) {
         self.task = task
     }
-    
-    
-     func toggleCheckbox() {
-//         task.isCompleted.toggle()
-         delegate?.toggleCheckbox(for: self)
-//         print("toggle")
-         task.isCompleted.toggle()
-         taskViewModel?.saveTasks()
-         print("task isCompleted", task.isCompleted)
-     }
     
     func createContextMenuConfiguration(for indexPath: IndexPath) -> UIContextMenuConfiguration? {
         let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in

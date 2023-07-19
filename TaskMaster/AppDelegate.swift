@@ -14,16 +14,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        
-        let taskViewModel = TaskViewModel(context: persistentContainer.viewContext)
-        
+                
         let tabBarController = UITabBarController()
         
+        let taskViewModel = TaskViewModel(context: persistentContainer.viewContext)
         let TaskViewController = TaskViewController(taskViewModel: taskViewModel)
         TaskViewController.tabBarItem.title = "Tasks"
         TaskViewController.tabBarItem.image = UIImage(systemName: "list.bullet.clipboard")
         
-        let CalendarViewController = CalendarViewController()
+        let dataManager = DataManager.shared
+
+        let calendarViewModel = CalendarViewModel(dataManager: dataManager)
+        let CalendarViewController = CalendarViewController(calendarViewModel: calendarViewModel)
         CalendarViewController.tabBarItem.title = "Calendar"
         CalendarViewController.tabBarItem.image = UIImage(systemName: "calendar")
         

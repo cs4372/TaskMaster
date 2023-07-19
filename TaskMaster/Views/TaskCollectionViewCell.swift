@@ -10,6 +10,9 @@ import ChameleonFramework
 
 class TaskCollectionViewCell: UICollectionViewCell {
     
+    weak var delegate: TaskCellDelegate?
+    var task: Task?
+    
     let LabelsStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.alignment = .center
@@ -33,6 +36,7 @@ class TaskCollectionViewCell: UICollectionViewCell {
     
     private let checkboxButton: UIButton = {
         let button = UIButton()
+        button.addTarget(self, action: #selector(toggleCheckbox), for: .touchUpInside)
         return button
     }()
     
@@ -86,7 +90,6 @@ class TaskCollectionViewCell: UICollectionViewCell {
         dateLabel.text = viewModel.taskDueDate
 //        contentView.backgroundColor = viewModel.taskColor
         let checkboxImageName = viewModel.task.isCompleted ? "checkmark.circle" : "circle"
-        print("checkboxImageName ==>", checkboxImageName)
         
 //        guard let color = UIColor(hexString: viewModel.taskColor) else {
 //            return
@@ -98,10 +101,9 @@ class TaskCollectionViewCell: UICollectionViewCell {
         let imageConfiguration = UIImage.SymbolConfiguration(pointSize: 25, weight: .medium, scale: .large)
         let image = UIImage(systemName: checkboxImageName, withConfiguration: imageConfiguration)
         checkboxButton.setImage(image, for: .normal)
-        checkboxButton.addTarget(self, action: #selector(toggleCheckbox), for: .touchUpInside)
     }
     
     @objc private func toggleCheckbox() {
-           viewModel?.toggleCheckbox()
-       }
+        delegate?.didToggleCheckbox(for: self)
+    }
 }

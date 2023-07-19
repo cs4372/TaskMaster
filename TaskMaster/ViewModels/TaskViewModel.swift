@@ -81,6 +81,7 @@ class TaskViewModel {
     
     func saveTasks() {
         do {
+            print("save tasks ====>")
             try context.save()
         } catch {
             print("Error saving context: \(error)")
@@ -99,5 +100,14 @@ class TaskViewModel {
         tasks.append(newTask)
         saveTasks()
         print("numberOfTasks inside addTask", numberOfTasks)
+    }
+    
+    func saveTasks(currentTask: Task) {
+        print("task in Taskvm", task)
+        do {
+            try context.save()
+        } catch {
+            print("Error saving context: \(error)")
+        }
     }
 }

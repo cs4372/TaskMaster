@@ -241,8 +241,8 @@ extension TaskViewController: UICollectionViewDataSource {
         
         let task = taskViewModel.task(at: indexPath.item)
         let cellViewModel = TaskCellViewModel(task: task)
-        print("tasl in cell for ", task)
-        cellViewModel.delegate = self
+        cell.task = task
+        cell.delegate = self
         cell.viewModel = cellViewModel
 
         return cell
@@ -253,20 +253,6 @@ extension TaskViewController: UICollectionViewDataSource {
         let cellViewModel = TaskCellViewModel(task: task)
           return cellViewModel.createContextMenuConfiguration(for: indexPath)
       }
-      
-    
-//    @objc private func toggleCheckbox(_ sender: UIButton) {
-//        guard let cell = sender.superview?.superview as? TaskCollectionViewCell,
-//              let indexPath = collectionView.indexPath(for: cell) else {
-//            return
-//        }
-//        
-//        let task = taskViewModel.task(at: indexPath.item)
-//        let cellViewModel = TaskCellViewModel(task: task)
-//        cellViewModel.toggleCheckbox()
-//        
-//        collectionView.reloadData()
-//    }
 }
 
 extension TaskViewController: UICollectionViewDelegateFlowLayout {
@@ -340,11 +326,13 @@ extension TaskViewController: AddTaskViewDelegate {
     }
 }
 
-extension TaskViewController: TaskCellViewModelDelegate {
-    func toggleCheckbox(for cell: TaskCollectionViewCell) {
+extension TaskViewController: TaskCellDelegate {
+    func didToggleCheckbox(for cell: TaskCollectionViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         let task = taskViewModel.task(at: indexPath.item)
+        task.isCompleted.toggle()
         taskViewModel.saveTasks()
+
         collectionView.reloadData()
     }
 }
