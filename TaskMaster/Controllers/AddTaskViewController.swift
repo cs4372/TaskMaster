@@ -59,6 +59,7 @@ class AddTaskViewController: UIViewController {
     
     private lazy var dueDatePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
+        datePicker.datePickerMode = .date
         return datePicker
     }()
     
@@ -67,6 +68,7 @@ class AddTaskViewController: UIViewController {
         button.setTitle("Save", for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 5
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         button.addTarget(self, action: #selector(saveTask), for: .touchUpInside)
         return button
     }()

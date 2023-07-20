@@ -1,17 +1,17 @@
 //
-//  TaskTableViewCell.swift
+//  CalendarTableViewCell.swift
 //  TaskMaster
 //
-//  Created by Catherine Shing on 7/17/23.
+//  Created by Catherine Shing on 7/19/23.
 //
 
 import UIKit
 
-class TaskTableViewCell: UITableViewCell {
+class CalendarTableViewCell: UITableViewCell {
     
     let taskLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = .blue
         label.font = UIFont.systemFont(ofSize: 21, weight: .regular)
         return label
     }()

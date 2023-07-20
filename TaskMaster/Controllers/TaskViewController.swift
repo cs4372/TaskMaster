@@ -52,6 +52,7 @@ class TaskViewController: UIViewController {
         taskViewModel.groupTasksByDate()
         self.tableView.reloadData()
         self.collectionView.reloadData()
+        DataManager.shared.groupTasksByDate(tasks: taskViewModel.tasks)
     }
     
     lazy var dateFormatter: DateFormatter = {
@@ -258,7 +259,6 @@ extension TaskViewController: UICollectionViewDelegateFlowLayout {
 extension TaskViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         let tasksByDate = taskViewModel.tasksByDate
-        print("tasksByDate ==>", tasksByDate)
         if tasksByDate.isEmpty {
             tableView.setEmptyView(title: "You don't have any tasks yet!", message: "Click the + button to add some tasks")
         } else {
@@ -280,7 +280,6 @@ extension TaskViewController: UITableViewDataSource {
         let tasksForSection = tasksByDate[sectionDateString]
         
         if let task = tasksForSection?[indexPath.row] {
-            print("tasl", task)
             cell.setup(with: task)
             cell.textLabel?.text = task.title
         }

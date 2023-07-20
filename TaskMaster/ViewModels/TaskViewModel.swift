@@ -18,7 +18,7 @@ class TaskViewModel {
     
     weak var delegate: TaskViewModelDelegate?
     private let context: NSManagedObjectContext
-    private var tasks: [Task] = []
+    var tasks: [Task] = []
     
     var tasksByDate: [String: [Task]] = [:]
     

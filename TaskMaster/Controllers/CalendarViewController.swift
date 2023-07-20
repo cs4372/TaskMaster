@@ -32,7 +32,7 @@ class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendar
         let tableView = UITableView()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "calendarCell")
+        tableView.register(CalendarTableViewCell.self, forCellReuseIdentifier: "calendarCell")
         return tableView
     }()
     
@@ -42,8 +42,17 @@ class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendar
         view.backgroundColor = .white
         
         calendarViewModel.reloadData()
-        
+        tableView.reloadData()
+        calendarView.reloadData()
         setupLayout()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        calendarViewModel.reloadData()
+        
+        tableView.reloadData()
+        calendarView.reloadData()
     }
     
     private func setupLayout() {
@@ -72,7 +81,8 @@ class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendar
     // MARK: - FSCalendarDelegate
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        return calendarViewModel.getSelectedDateTasks(date: date)
+        calendarViewModel.getSelectedDateTasks(date: date)
+        tableView.reloadData()
     }
     
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
@@ -83,13 +93,26 @@ class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendar
 
 extension CalendarViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        2
+        return calendarViewModel.selectedTasks?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "calendarCell", for: indexPath)
-        cell.textLabel?.text = "example"
+        let cell = tableView.dequeueReusableCell(withIdentifier: "calendarCell", for: indexPath) as! CalendarTableViewCell
+        
+        if let task = calendarViewModel.selectedTasks?[indexPath.row] {
+            cell.setup(with: task)
+        }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if calendarViewModel.selectedTasks == nil {
+            tableView.setEmptyView(title: "You don't have any tasks on this date!", message: "")
+        } else {
+            tableView.restore()
+            return calendarViewModel.selectedDate
+        }
+        return nil
     }
 }
 
