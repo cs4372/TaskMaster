@@ -22,7 +22,7 @@ class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendar
     }
     
     private lazy var calendarView: FSCalendar = {
-        calendarView = FSCalendar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 300))
+        calendarView = FSCalendar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 350))
         calendarView.dataSource = self
         calendarView.delegate = self
         return calendarView
@@ -66,17 +66,14 @@ class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendar
             calendarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             calendarView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             calendarView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            calendarView.heightAnchor.constraint(equalToConstant: 300)
-        ])
+            calendarView.heightAnchor.constraint(equalToConstant: 300),
         
-        NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: calendarView.bottomAnchor, constant: 16),
             tableView.leadingAnchor.constraint(equalTo: calendarView.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: calendarView.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 10)
         ])
     }
-    
     
     // MARK: - FSCalendarDelegate
     

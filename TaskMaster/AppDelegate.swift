@@ -29,7 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         CalendarViewController.tabBarItem.title = "Calendar"
         CalendarViewController.tabBarItem.image = UIImage(systemName: "calendar")
         
-        let CompletedTasksViewController = CompletedTasksViewController()
+        let completedTasksViewModel = CompletedTasksViewModel(context: persistentContainer.viewContext)
+        let CompletedTasksViewController = CompletedTasksViewController(completedTasksViewModel: completedTasksViewModel)
         CompletedTasksViewController.tabBarItem.title = "Completed Tasks"
         CompletedTasksViewController.tabBarItem.image = UIImage(systemName: "checkmark.icloud")
         

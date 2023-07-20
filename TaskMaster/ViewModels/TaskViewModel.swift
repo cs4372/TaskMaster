@@ -129,6 +129,51 @@ class TaskViewModel {
         return configuration
     }
     
+    private func createEditAction(for indexPath: IndexPath) -> UIAction {
+        let task = task(at: indexPath.row)
+        print("task edit ==>", task)
+
+        let editAction = UIAction(title: "Edit", image: UIImage(systemName: "pencil")) { [weak self] _ in
+            guard let self = self else { return }
+                        
+            let addTaskViewModel = AddTaskViewModel(context: self.context)
+            addTaskViewModel.editTask = task
+            
+            self.delegate?.presentAddTaskVC(with: addTaskViewModel)
+        }
+
+        return editAction
+    }
+    
+    private func createDeleteAction(for indexPath: IndexPath) -> UIAction {
+        let task = task(at: indexPath.row)
+        
+        let deleteAction = UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
+            guard let self = self else { return }
+            
+            guard let dueDate = task.dueDate else { return }
+            let dateString = DateHelper.formattedFullDate(from: dueDate)
+            
+            if var tasksOnDueDate = tasksByDate[dateString] {
+                if let taskIndex = tasksOnDueDate.firstIndex(of: task) {
+                    tasksOnDueDate.remove(at: taskIndex)
+                    tasksByDate[dateString] = tasksOnDueDate
+                    
+                    if tasksOnDueDate.isEmpty {
+                        tasksByDate.removeValue(forKey: dateString)
+                    }
+                }
+            }
+            
+            context.delete(task)
+            tasks.remove(at: indexPath.row)
+            saveTasks()
+            DataManager.shared.groupTasksByDate(tasks: tasks)
+            self.delegate?.reloadData()
+        }
+        return deleteAction
+    }
+    
     func swipeActionsConfiguration(for indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let task = task(at: indexPath.row)
 
@@ -179,50 +224,5 @@ class TaskViewModel {
         
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
         return configuration
-    }
-    
-    private func createEditAction(for indexPath: IndexPath) -> UIAction {
-        let task = task(at: indexPath.row)
-        print("task edit ==>", task)
-
-        let editAction = UIAction(title: "Edit", image: UIImage(systemName: "pencil")) { [weak self] _ in
-            guard let self = self else { return }
-                        
-            let addTaskViewModel = AddTaskViewModel(context: self.context)
-            addTaskViewModel.editTask = task
-            
-            self.delegate?.presentAddTaskVC(with: addTaskViewModel)
-        }
-
-        return editAction
-    }
-    
-    private func createDeleteAction(for indexPath: IndexPath) -> UIAction {
-        let task = task(at: indexPath.row)
-        
-        let deleteAction = UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
-            guard let self = self else { return }
-            
-            guard let dueDate = task.dueDate else { return }
-            let dateString = DateHelper.formattedFullDate(from: dueDate)
-            
-            if var tasksOnDueDate = tasksByDate[dateString] {
-                if let taskIndex = tasksOnDueDate.firstIndex(of: task) {
-                    tasksOnDueDate.remove(at: taskIndex)
-                    tasksByDate[dateString] = tasksOnDueDate
-                    
-                    if tasksOnDueDate.isEmpty {
-                        tasksByDate.removeValue(forKey: dateString)
-                    }
-                }
-            }
-            
-            context.delete(task)
-            tasks.remove(at: indexPath.row)
-            saveTasks()
-            DataManager.shared.groupTasksByDate(tasks: tasks)
-            self.delegate?.reloadData()
-        }
-        return deleteAction
     }
 }
