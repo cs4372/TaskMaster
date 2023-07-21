@@ -324,12 +324,21 @@ extension TaskViewController: AddTaskViewDelegate {
 extension TaskViewController: TaskCellDelegate {
     func didToggleCheckbox(for cell: TaskCollectionViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        taskViewModel.toggleCheckbox(for: indexPath)
+        collectionView.reloadItems(at: [indexPath])
+        
         let task = taskViewModel.task(at: indexPath.item)
-        task.isCompleted.toggle()
-        taskViewModel.saveTasks()
-        collectionView.reloadData()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            if let index = self.taskViewModel.tasks.firstIndex(where: { $0 == task }) {
+                self.taskViewModel.tasks.remove(at: index)
+                self.taskViewModel.saveTasks()
+                self.collectionView.reloadData()
+            }
+        }
     }
 }
+
 
 extension TaskViewController: TaskViewModelDelegate {
     func presentAddTaskVC(with viewModel: AddTaskViewModel) {

@@ -14,7 +14,6 @@ protocol TaskCellDelegate: AnyObject {
 class TaskCellViewModel {
     let task: Task
     
-    //    weak var delegate: TaskCellViewModelDelegate?
     weak var taskViewModel: TaskViewModel?
     
     var taskTitle: String {

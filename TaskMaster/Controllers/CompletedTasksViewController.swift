@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class CompletedTasksViewController: UIViewController, CompletedTasksViewModelDelegate {
     
@@ -17,11 +18,12 @@ class CompletedTasksViewController: UIViewController, CompletedTasksViewModelDel
         
         view.backgroundColor = .white
         
-        completedTasksViewModel.delegate = self
+        self.completedTasksViewModel.delegate = self
         
         setupCollectionView()
         setupLayout()
         completedTasksViewModel.loadTasks()
+        completedTasksViewModel.completedTasksChange()
         collectionView.reloadData()
     }
     
@@ -44,6 +46,7 @@ class CompletedTasksViewController: UIViewController, CompletedTasksViewModelDel
 //        view.addGestureRecognizer(tapGesture)
         
         completedTasksViewModel.loadTasks()
+        completedTasksViewModel.completedTasksChange()
         collectionView.reloadData()
     }
     
@@ -105,10 +108,43 @@ class CompletedTasksViewController: UIViewController, CompletedTasksViewModelDel
     func reloadData() {
         collectionView.reloadData()
     }
+    
+    func completedTasksDidUpdate(count: Int) {
+        print("count inside mainnn")
+        collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.completedTasksLabel.text = "You completed \(count) tasks!"
+        }
+    }
 }
+
+// MARK: UISearchBarDelegate
 
 extension CompletedTasksViewController: UISearchBarDelegate {
     
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let searchText = searchBar.text, !searchText.isEmpty {
+            let request: NSFetchRequest<Task> = Task.fetchRequest()
+            let titlePredicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+            request.predicate = titlePredicate
+            request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+
+            completedTasksViewModel.loadTasks(with: request, predicate: titlePredicate)
+        }
+        searchBar.resignFirstResponder()
+        self.collectionView.reloadData()
+    }
+
+   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+       if searchBar.text?.count == 0 {
+           completedTasksViewModel.loadTasks()
+
+           DispatchQueue.main.async {
+               searchBar.resignFirstResponder()
+           }
+           self.collectionView.reloadData()
+       }
+   }
 }
 
 extension CompletedTasksViewController: UICollectionViewDataSource {
@@ -128,9 +164,9 @@ extension CompletedTasksViewController: UICollectionViewDataSource {
         }
         
         let task = completedTasksViewModel.task(at: indexPath.item)
-        let cellViewModel = TaskCellViewModel(task: task)
+        let cellViewModel = TaskCellViewModel(task: task!)
         cell.task = task
-//        cell.delegate = self
+        cell.delegate = self
         cell.viewModel = cellViewModel
         return cell
     }
@@ -143,5 +179,23 @@ extension CompletedTasksViewController: UICollectionViewDataSource {
 extension CompletedTasksViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 180, height: 200)
+    }
+}
+
+extension CompletedTasksViewController: TaskCellDelegate {
+    func didToggleCheckbox(for cell: TaskCollectionViewCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        completedTasksViewModel.toggleCheckbox(for: indexPath)
+        collectionView.reloadItems(at: [indexPath])
+        
+        let task = completedTasksViewModel.task(at: indexPath.item)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            if let index = self.completedTasksViewModel.completedTasks.firstIndex(where: { $0 == task }) {
+                self.completedTasksViewModel.completedTasks.remove(at: index)
+                self.completedTasksViewModel.saveTasks()
+                self.collectionView.reloadData()
+            }
+        }
     }
 }

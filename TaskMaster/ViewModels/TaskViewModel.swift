@@ -35,9 +35,9 @@ class TaskViewModel {
     func loadTasks() {
         let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
         let sortByDueDate = NSSortDescriptor(key: "dueDate", ascending: true)
-//        let isCompletedPredicate = NSPredicate(format: "isCompleted == %@", NSNumber(value: false))
+        let isCompletedPredicate = NSPredicate(format: "isCompleted == %@", NSNumber(value: false))
         fetchRequest.sortDescriptors = [sortByDueDate]
-//        fetchRequest.predicate = isCompletedPredicate
+        fetchRequest.predicate = isCompletedPredicate
         
         do {
             tasks = try context.fetch(fetchRequest)
@@ -225,4 +225,10 @@ class TaskViewModel {
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
         return configuration
     }
+    
+    func toggleCheckbox(for indexPath: IndexPath) {
+          let task = tasks[indexPath.row]
+          task.isCompleted.toggle()
+          saveTasks()
+      }
 }

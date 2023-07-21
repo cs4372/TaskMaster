@@ -10,26 +10,30 @@ import CoreData
 import UIKit
 
 protocol CompletedTasksViewModelDelegate: AnyObject {
-//    func presentAddTaskVC(with viewModel: AddTaskViewModel)
     func reloadData()
+    func completedTasksDidUpdate(count: Int)
 }
 
 class CompletedTasksViewModel {
-    var completedTasks: [Task] = []
     private let context: NSManagedObjectContext
     
     weak var delegate: CompletedTasksViewModelDelegate?
     
-    var greetingText: String {
-          return "You completed \(completedTasks.count) tasks!"
-      }
+    var completedTasks: [Task] = []
+    
+    func completedTasksChange() {
+        loadTasks()
+        let count = completedTasks.count
+        print("count ==>", count)
+        delegate?.completedTasksDidUpdate(count: count)
+    }
     
     init(context: NSManagedObjectContext) {
         self.context = context
     }
     
     func loadTasks(with request: NSFetchRequest<Task> = Task.fetchRequest(), predicate: NSPredicate? = nil) {
-
+        
         let isCompletedPredicate = NSPredicate(format: "isCompleted == %d", true)
         
         if let additionalPredicate = predicate {
@@ -55,18 +59,12 @@ class CompletedTasksViewModel {
     }
     
     func toggleTaskCompletion(at index: Int) {
-        guard index >= 0 && index < completedTasks.count else { return }
-        completedTasks[index].isCompleted.toggle()
-        saveTasks()
+            guard index >= 0 && index < completedTasks.count else { return }
+            completedTasks[index].isCompleted.toggle()
+            saveTasks()
     }
     
-//    func removeTask(at index: Int) {
-//        guard index >= 0 && index < completedTasks.count else { return }
-//        dataManager.deleteTask(completedTasks[index])
-//        completedTasks.remove(at: index)
-//    }
-    
-    func task(at index: Int) -> Task {
+    func task(at index: Int) -> Task? {
         return completedTasks[index]
     }
     
@@ -85,13 +83,11 @@ class CompletedTasksViewModel {
         let editAction = UIAction(title: "Set it to incomplete", image: UIImage(systemName: "pencil")) { [weak self] _ in
             guard let self = self else { return }
             
-            // TODO: Update incomplete action
-//            let task = self.completedTasks[indexPath.row]
-//                task.isCompleted = false
-//                self.completedTasks.remove(at: indexPath.row)
-//                self.saveTasks()
-//            delegate?.reloadData()
-//                self.collectionView.reloadData()
+                let task = completedTasks[indexPath.row]
+                task.isCompleted = false
+                completedTasks.remove(at: indexPath.row)
+                self.saveTasks()
+                delegate?.reloadData()
         }
         
         return editAction
@@ -101,14 +97,22 @@ class CompletedTasksViewModel {
         let deleteAction = UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
             guard let self = self else { return }
             
-            let deleteItem = self.completedTasks[indexPath.row]
+                let deleteItem = completedTasks[indexPath.row]
                 self.context.delete(deleteItem)
-                self.completedTasks.remove(at: indexPath.row)
+                completedTasks.remove(at: indexPath.row)
                 self.saveTasks()
-//                self.collectionView.reloadData()
-            delegate?.reloadData()
-            }
+                //                self.collectionView.reloadData()
+                delegate?.reloadData()
+                completedTasksChange()
+        }
         
         return deleteAction
+    }
+    
+    func toggleCheckbox(for indexPath: IndexPath) {
+            let task = completedTasks[indexPath.row]
+            task.isCompleted.toggle()
+            saveTasks()
+        delegate?.reloadData()
     }
 }
