@@ -11,7 +11,6 @@ class TaskTableViewCell: UITableViewCell {
     
     let taskLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 21, weight: .regular)
         return label
     }()

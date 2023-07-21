@@ -12,7 +12,7 @@ class TaskCollectionViewCell: UICollectionViewCell {
     
     weak var delegate: TaskCellDelegate?
     var task: Task?
-    
+        
     let LabelsStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.alignment = .center
@@ -62,7 +62,7 @@ class TaskCollectionViewCell: UICollectionViewCell {
         LabelsStackView.axis = .vertical
         LabelsStackView.spacing = 1
         LabelsStackView.alignment = .leading
-        contentView.backgroundColor = .orange
+    
         contentView.layer.cornerRadius = 10
         contentView.clipsToBounds = true
         
@@ -88,16 +88,15 @@ class TaskCollectionViewCell: UICollectionViewCell {
         
         taskLabel.text = viewModel.taskTitle
         dateLabel.text = viewModel.taskDueDate
-//        contentView.backgroundColor = viewModel.taskColor
         let checkboxImageName = viewModel.task.isCompleted ? "checkmark.circle" : "circle"
         
-//        guard let color = UIColor(hexString: viewModel.taskColor) else {
-//            return
-//        }
-//
-//        taskLabel?.textColor = ContrastColorOf(color, returnFlat: true)
-//        dateLabel?.textColor = ContrastColorOf(color, returnFlat: true)
-//        backgroundColor = color
+         guard let color = UIColor(hexString: viewModel.taskColor ?? "000") else {
+            return
+        }
+
+        taskLabel.textColor = ContrastColorOf(color, returnFlat: true)
+        dateLabel.textColor = ContrastColorOf(color, returnFlat: true)
+        backgroundColor = color
         let imageConfiguration = UIImage.SymbolConfiguration(pointSize: 25, weight: .medium, scale: .large)
         let image = UIImage(systemName: checkboxImageName, withConfiguration: imageConfiguration)
         checkboxButton.setImage(image, for: .normal)

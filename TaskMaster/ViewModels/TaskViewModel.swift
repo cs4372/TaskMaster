@@ -41,7 +41,6 @@ class TaskViewModel {
         
         do {
             tasks = try context.fetch(fetchRequest)
-            print("count", tasks.count)
         } catch {
             print("Error fetching data: \(error)")
         }
@@ -88,7 +87,6 @@ class TaskViewModel {
     
     func saveTasks() {
         do {
-            print("save tasks ====>")
             try context.save()
         } catch {
             print("Error saving context: \(error)")
@@ -106,11 +104,9 @@ class TaskViewModel {
     func addTask(newTask: Task) {
         tasks.append(newTask)
         saveTasks()
-        print("numberOfTasks inside addTask", numberOfTasks)
     }
     
     func saveTasks(currentTask: Task) {
-        print("task in Taskvm", task)
         do {
             try context.save()
         } catch {
@@ -131,7 +127,6 @@ class TaskViewModel {
     
     private func createEditAction(for indexPath: IndexPath) -> UIAction {
         let task = task(at: indexPath.row)
-        print("task edit ==>", task)
 
         let editAction = UIAction(title: "Edit", image: UIImage(systemName: "pencil")) { [weak self] _ in
             guard let self = self else { return }
@@ -231,4 +226,14 @@ class TaskViewModel {
           task.isCompleted.toggle()
           saveTasks()
       }
+    
+    func setupUserNameLabel() -> String {
+        let greeting = "Hi User!"
+
+        if let savedUserName = UserDefaults.standard.string(forKey: "UserName") {
+            let greeting = "Hi \(savedUserName)!"
+            return greeting
+        }
+        return greeting
+    }
 }

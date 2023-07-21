@@ -22,7 +22,6 @@ class CalendarViewModel {
     
     func reloadData() {
         tasksByDate = dataManager.tasksByDate
-        print("tasksByDate", tasksByDate)
         if let tasksByDate {
             selectedTasks = getTasks(date: selectedDate!)
             dateKeys = Array(tasksByDate.keys)

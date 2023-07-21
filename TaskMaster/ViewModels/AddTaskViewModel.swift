@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import ChameleonFramework
 
 protocol AddTaskViewDelegate: AnyObject {
     func didAddTask(_ task: Task)
@@ -33,9 +34,9 @@ class AddTaskViewModel {
             let newTask = Task(context: context)
             newTask.title = title
             newTask.dueDate = dueDate
-            //               let color = RandomFlatColorWithShade(.light)
-            //               let lightenedColor = color.lighten(byPercentage: 0.3)
-            //               newTask.taskColor = (lightenedColor?.hexValue())!
+            let color = RandomFlatColorWithShade(.light)
+            let lightenedColor = color.lighten(byPercentage: 0.3)
+            newTask.taskColor = (lightenedColor?.hexValue())!
             newTask.isCompleted = false
             
             do {

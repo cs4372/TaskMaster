@@ -6,8 +6,6 @@
 //
 
 import UIKit
-import CLTypingLabel
-import TextFieldEffects
 import ChameleonFramework
 
 class InitialLaunchViewController: UIViewController {
@@ -29,7 +27,6 @@ class InitialLaunchViewController: UIViewController {
         setupUI()
         setupLayout()
     }
-    
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()

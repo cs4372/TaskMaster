@@ -7,6 +7,7 @@
 
 import UIKit
 import PanModal
+import ChameleonFramework
 
 class TaskViewController: UIViewController {
     enum DisplayMode {
@@ -55,12 +56,6 @@ class TaskViewController: UIViewController {
         DataManager.shared.groupTasksByDate(tasks: taskViewModel.tasks)
     }
     
-    lazy var dateFormatter: DateFormatter = {
-         let formatter = DateFormatter()
-         formatter.dateFormat = "yyyy-MM-dd"
-         return formatter
-     }()
-    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -82,15 +77,16 @@ class TaskViewController: UIViewController {
         let label = UILabel()
         label.textColor = .blue
         label.font = UIFont(name: "Futura", size: 25)
-        label.text = "Hi Cat!"
+        label.text = taskViewModel.setupUserNameLabel()
+        label.textColor = FlatWatermelon()
         return label
     }()
     
     private lazy var dateLabel: UILabel = {
           let label = UILabel()
-//          label.textColor = FlatSkyBlue()
-        label.text = "Today is 16-Jul Sun"
+        label.text = "Today is \(DateHelper.formattedDate(from: Date()))"
         label.font = UIFont(name: "Futura", size: 25)
+        label.textColor = FlatSkyBlue()
         return label
       }()
     
@@ -109,11 +105,11 @@ class TaskViewController: UIViewController {
         button.frame = CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize)
         button.layer.cornerRadius = buttonSize / 2
         button.clipsToBounds = true
-        button.backgroundColor = .systemBlue
+        button.backgroundColor = .flatWatermelon()
         
         let plusImage = UIImage(systemName: "plus")
         button.setImage(plusImage, for: .normal)
-        button.tintColor = .white
+        button.tintColor = FlatSkyBlue()
         
         button.addTarget(self, action: #selector(addTask), for: .touchUpInside)
         
@@ -189,9 +185,7 @@ class TaskViewController: UIViewController {
     }
     
     @objc func addTask() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
-        }
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         let context = appDelegate.persistentContainer.viewContext
         let addTaskViewModel = AddTaskViewModel(context: context)
@@ -202,7 +196,7 @@ class TaskViewController: UIViewController {
          presentPanModal(addTaskViewController)
      }
     
-    @IBAction func viewTypeChanged(_ sender: UISegmentedControl) {
+    @objc func viewTypeChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
             displayMode = .collection
@@ -281,7 +275,6 @@ extension TaskViewController: UITableViewDataSource {
         
         if let task = tasksForSection?[indexPath.row] {
             cell.setup(with: task)
-            cell.textLabel?.text = task.title
         }
         return cell
     }
@@ -298,14 +291,13 @@ extension TaskViewController: UITableViewDataSource {
 
 extension TaskViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Selected row: \(indexPath.row)")
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 }
 
 extension TaskViewController: AddTaskViewDelegate {
     func didAddTask(_ task: Task) {
         taskViewModel.addTask(newTask: task)
-        print("inside TaskViewController add task")
         taskViewModel.saveTasks()
     }
     
@@ -338,7 +330,6 @@ extension TaskViewController: TaskCellDelegate {
         }
     }
 }
-
 
 extension TaskViewController: TaskViewModelDelegate {
     func presentAddTaskVC(with viewModel: AddTaskViewModel) {

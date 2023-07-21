@@ -24,12 +24,8 @@ class TaskCellViewModel {
         return DateHelper.formattedDate(from: task.dueDate!)
     }
     
-    var taskColor: UIColor {
-        //        guard let color = UIColor(hexString: task.taskColor) else {
-        //            return .white
-        //        }
-        //        return color
-        return .orange
+    var taskColor: String? {
+        return task.taskColor
     }
     
     var checkboxImage: UIImage? {
