@@ -110,7 +110,6 @@ class CompletedTasksViewController: UIViewController, CompletedTasksViewModelDel
     }
     
     func completedTasksDidUpdate(count: Int) {
-        print("count inside mainnn")
         collectionView.reloadData()
         DispatchQueue.main.async {
             self.completedTasksLabel.text = "You completed \(count) tasks!"
@@ -195,6 +194,7 @@ extension CompletedTasksViewController: TaskCellDelegate {
                 self.completedTasksViewModel.completedTasks.remove(at: index)
                 self.completedTasksViewModel.saveTasks()
                 self.collectionView.reloadData()
+                self.completedTasksViewModel.completedTasksChange()
             }
         }
     }

@@ -17,6 +17,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
         let tabBarController = UITabBarController()
         
+        // MARK: InitialLaunchViewController
+        
+        let initialLaunchViewModel = InitialLaunchViewModel()
+        let InitialLaunchViewController = InitialLaunchViewController(initialLaunchViewModel: initialLaunchViewModel)
+
+        // MARK: TaskViewController
+        
         let taskViewModel = TaskViewModel(context: persistentContainer.viewContext)
         let TaskViewController = TaskViewController(taskViewModel: taskViewModel)
         TaskViewController.tabBarItem.title = "Tasks"
@@ -24,21 +31,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let dataManager = DataManager.shared
 
+        // MARK: CalendarViewController
+
         let calendarViewModel = CalendarViewModel(dataManager: dataManager)
         let CalendarViewController = CalendarViewController(calendarViewModel: calendarViewModel)
         CalendarViewController.tabBarItem.title = "Calendar"
         CalendarViewController.tabBarItem.image = UIImage(systemName: "calendar")
         
+        // MARK: CompletedViewController
+
         let completedTasksViewModel = CompletedTasksViewModel(context: persistentContainer.viewContext)
         let CompletedTasksViewController = CompletedTasksViewController(completedTasksViewModel: completedTasksViewModel)
         CompletedTasksViewController.tabBarItem.title = "Completed Tasks"
         CompletedTasksViewController.tabBarItem.image = UIImage(systemName: "checkmark.icloud")
-        
+                
         tabBarController.viewControllers = [TaskViewController, CalendarViewController, CompletedTasksViewController]
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
+        
+        // MARK: Set rootViewController
+        
+        let userDefaults = UserDefaults.standard
+        
+        if userDefaults.string(forKey: "UserName") == nil {
+            window?.rootViewController = InitialLaunchViewController
+        } else {
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first {
+                window.rootViewController = tabBarController
+            }
+        }
+        
+        window?.makeKeyAndVisible()
+        userDefaults.synchronize()
         
         return true
     }
@@ -88,6 +115,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-
 }
-

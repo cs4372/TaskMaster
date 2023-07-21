@@ -84,13 +84,11 @@ class TaskCollectionViewCell: UICollectionViewCell {
     }
     
      func configureCell() {
-        print("inside configure cell")
         guard let viewModel = viewModel else { return }
         
         taskLabel.text = viewModel.taskTitle
         dateLabel.text = viewModel.taskDueDate
 //        contentView.backgroundColor = viewModel.taskColor
-         print("viewModel ==>", viewModel)
         let checkboxImageName = viewModel.task.isCompleted ? "checkmark.circle" : "circle"
         
 //        guard let color = UIColor(hexString: viewModel.taskColor) else {
@@ -106,7 +104,6 @@ class TaskCollectionViewCell: UICollectionViewCell {
     }
     
     @objc private func toggleCheckbox() {
-        print("toggle in task collection view")
         delegate?.didToggleCheckbox(for: self)
     }
 }

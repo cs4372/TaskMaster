@@ -33,6 +33,8 @@
 		476A11282A675E720021AA5F /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A11272A675E720021AA5F /* DataManager.swift */; };
 		476A112C2A67AA0E0021AA5F /* CalendarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A112B2A67AA0E0021AA5F /* CalendarTableViewCell.swift */; };
 		476A112E2A68DDEC0021AA5F /* CompletedTasksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A112D2A68DDEC0021AA5F /* CompletedTasksViewModel.swift */; };
+		476A11302A6A2DDD0021AA5F /* InitialLaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A112F2A6A2DDD0021AA5F /* InitialLaunchViewController.swift */; };
+		476A11322A6A3B090021AA5F /* InitialLaunchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A11312A6A3B090021AA5F /* InitialLaunchViewModel.swift */; };
 		4CED157484CFF68A9293D587 /* Pods_TaskMaster.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B37C8FB62C585B9A7EFF977 /* Pods_TaskMaster.framework */; };
 		F5A1207A165BBEAF7D4B5126 /* Pods_TaskMasterTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59097F76C8D0B3EBB23F4AAD /* Pods_TaskMasterTests.framework */; };
 		F89B4091A2B48BCF95E04E93 /* Pods_TaskMaster_TaskMasterUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D3FB1602EE7A20EDD2FFE8A /* Pods_TaskMaster_TaskMasterUITests.framework */; };
@@ -88,6 +90,8 @@
 		476A11272A675E720021AA5F /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		476A112B2A67AA0E0021AA5F /* CalendarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTableViewCell.swift; sourceTree = "<group>"; };
 		476A112D2A68DDEC0021AA5F /* CompletedTasksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedTasksViewModel.swift; sourceTree = "<group>"; };
+		476A112F2A6A2DDD0021AA5F /* InitialLaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialLaunchViewController.swift; sourceTree = "<group>"; };
+		476A11312A6A3B090021AA5F /* InitialLaunchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialLaunchViewModel.swift; sourceTree = "<group>"; };
 		59097F76C8D0B3EBB23F4AAD /* Pods_TaskMasterTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaskMasterTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		650DE2D92307B3A84FA687F6 /* Pods-TaskMaster-TaskMasterUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskMaster-TaskMasterUITests.release.xcconfig"; path = "Target Support Files/Pods-TaskMaster-TaskMasterUITests/Pods-TaskMaster-TaskMasterUITests.release.xcconfig"; sourceTree = "<group>"; };
 		7A4EEF6D25F6D213680EAF54 /* Pods-TaskMaster-TaskMasterUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskMaster-TaskMasterUITests.debug.xcconfig"; path = "Target Support Files/Pods-TaskMaster-TaskMasterUITests/Pods-TaskMaster-TaskMasterUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -201,6 +205,7 @@
 				476A110E2A648E410021AA5F /* AddTaskViewController.swift */,
 				476A11212A6746860021AA5F /* CalendarViewController.swift */,
 				476A11232A6747BC0021AA5F /* CompletedTasksViewController.swift */,
+				476A112F2A6A2DDD0021AA5F /* InitialLaunchViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -220,6 +225,7 @@
 				476A11162A64E2990021AA5F /* AddTaskViewModel.swift */,
 				476A11252A675C550021AA5F /* CalendarViewModel.swift */,
 				476A112D2A68DDEC0021AA5F /* CompletedTasksViewModel.swift */,
+				476A11312A6A3B090021AA5F /* InitialLaunchViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -505,6 +511,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				476A11222A6746860021AA5F /* CalendarViewController.swift in Sources */,
+				476A11322A6A3B090021AA5F /* InitialLaunchViewModel.swift in Sources */,
 				476A112E2A68DDEC0021AA5F /* CompletedTasksViewModel.swift in Sources */,
 				476A10D72A6489170021AA5F /* TaskViewController.swift in Sources */,
 				476A111C2A663DC50021AA5F /* TaskTableViewCell.swift in Sources */,
@@ -512,6 +519,7 @@
 				476A11202A664CEE0021AA5F /* EmptyViewHelper.swift in Sources */,
 				476A110D2A648DC20021AA5F /* TaskViewModel.swift in Sources */,
 				476A111E2A664C6B0021AA5F /* EmptyTaskView.swift in Sources */,
+				476A11302A6A2DDD0021AA5F /* InitialLaunchViewController.swift in Sources */,
 				476A11262A675C550021AA5F /* CalendarViewModel.swift in Sources */,
 				476A11122A648F200021AA5F /* Task+CoreDataClass.swift in Sources */,
 				476A10D32A6489170021AA5F /* AppDelegate.swift in Sources */,

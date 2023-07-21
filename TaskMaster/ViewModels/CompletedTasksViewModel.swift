@@ -44,7 +44,6 @@ class CompletedTasksViewModel {
         
         do {
             completedTasks = try context.fetch(request)
-            print("completedTasks ==>", completedTasks)
         } catch {
             print("Error fetching data from context \(error)")
         }
