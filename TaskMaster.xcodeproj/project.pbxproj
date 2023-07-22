@@ -35,6 +35,7 @@
 		476A112E2A68DDEC0021AA5F /* CompletedTasksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A112D2A68DDEC0021AA5F /* CompletedTasksViewModel.swift */; };
 		476A11302A6A2DDD0021AA5F /* InitialLaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A112F2A6A2DDD0021AA5F /* InitialLaunchViewController.swift */; };
 		476A11322A6A3B090021AA5F /* InitialLaunchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A11312A6A3B090021AA5F /* InitialLaunchViewModel.swift */; };
+		476A11362A6B7B2B0021AA5F /* TabBarControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A11352A6B7B2B0021AA5F /* TabBarControllerHelper.swift */; };
 		4CED157484CFF68A9293D587 /* Pods_TaskMaster.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B37C8FB62C585B9A7EFF977 /* Pods_TaskMaster.framework */; };
 		F5A1207A165BBEAF7D4B5126 /* Pods_TaskMasterTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59097F76C8D0B3EBB23F4AAD /* Pods_TaskMasterTests.framework */; };
 		F89B4091A2B48BCF95E04E93 /* Pods_TaskMaster_TaskMasterUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D3FB1602EE7A20EDD2FFE8A /* Pods_TaskMaster_TaskMasterUITests.framework */; };
@@ -76,8 +77,8 @@
 		476A110A2A648C3F0021AA5F /* TaskCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCollectionViewCell.swift; sourceTree = "<group>"; };
 		476A110C2A648DC20021AA5F /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 		476A110E2A648E410021AA5F /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
-		476A11102A648F200021AA5F /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Task+CoreDataClass.swift"; path = "TaskMaster/Models/Task+CoreDataClass.swift"; sourceTree = "<group>"; };
-		476A11112A648F200021AA5F /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Task+CoreDataProperties.swift"; path = "TaskMaster/Models/Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		476A11102A648F200021AA5F /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = "<group>"; };
+		476A11112A648F200021AA5F /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		476A11142A64B2C90021AA5F /* TaskCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCellViewModel.swift; sourceTree = "<group>"; };
 		476A11162A64E2990021AA5F /* AddTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewModel.swift; sourceTree = "<group>"; };
 		476A11192A66221B0021AA5F /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
@@ -92,6 +93,7 @@
 		476A112D2A68DDEC0021AA5F /* CompletedTasksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedTasksViewModel.swift; sourceTree = "<group>"; };
 		476A112F2A6A2DDD0021AA5F /* InitialLaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialLaunchViewController.swift; sourceTree = "<group>"; };
 		476A11312A6A3B090021AA5F /* InitialLaunchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialLaunchViewModel.swift; sourceTree = "<group>"; };
+		476A11352A6B7B2B0021AA5F /* TabBarControllerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarControllerHelper.swift; sourceTree = "<group>"; };
 		59097F76C8D0B3EBB23F4AAD /* Pods_TaskMasterTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaskMasterTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		650DE2D92307B3A84FA687F6 /* Pods-TaskMaster-TaskMasterUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskMaster-TaskMasterUITests.release.xcconfig"; path = "Target Support Files/Pods-TaskMaster-TaskMasterUITests/Pods-TaskMaster-TaskMasterUITests.release.xcconfig"; sourceTree = "<group>"; };
 		7A4EEF6D25F6D213680EAF54 /* Pods-TaskMaster-TaskMasterUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskMaster-TaskMasterUITests.debug.xcconfig"; path = "Target Support Files/Pods-TaskMaster-TaskMasterUITests/Pods-TaskMaster-TaskMasterUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -142,8 +144,6 @@
 		476A10C62A6489170021AA5F = {
 			isa = PBXGroup;
 			children = (
-				476A11102A648F200021AA5F /* Task+CoreDataClass.swift */,
-				476A11112A648F200021AA5F /* Task+CoreDataProperties.swift */,
 				476A10D12A6489170021AA5F /* TaskMaster */,
 				476A10EB2A6489190021AA5F /* TaskMasterTests */,
 				476A10F52A6489190021AA5F /* TaskMasterUITests */,
@@ -166,9 +166,9 @@
 		476A10D12A6489170021AA5F /* TaskMaster */ = {
 			isa = PBXGroup;
 			children = (
+				476A11372A6B8CBE0021AA5F /* Model */,
 				476A11082A648BD20021AA5F /* Supporting */,
 				476A11072A648BCB0021AA5F /* ViewModels */,
-				476A11062A648BBF0021AA5F /* Extensions */,
 				476A11052A648BB80021AA5F /* Controllers */,
 				476A11092A648BDA0021AA5F /* Views */,
 				476A10D22A6489170021AA5F /* AppDelegate.swift */,
@@ -210,13 +210,6 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
-		476A11062A648BBF0021AA5F /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
 		476A11072A648BCB0021AA5F /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -255,8 +248,18 @@
 			children = (
 				476A11192A66221B0021AA5F /* DateHelper.swift */,
 				476A111F2A664CEE0021AA5F /* EmptyViewHelper.swift */,
+				476A11352A6B7B2B0021AA5F /* TabBarControllerHelper.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		476A11372A6B8CBE0021AA5F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				476A11112A648F200021AA5F /* Task+CoreDataProperties.swift */,
+				476A11102A648F200021AA5F /* Task+CoreDataClass.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		F0C3B4B531CA5BECC5BDB6C7 /* Pods */ = {
@@ -519,6 +522,7 @@
 				476A11202A664CEE0021AA5F /* EmptyViewHelper.swift in Sources */,
 				476A110D2A648DC20021AA5F /* TaskViewModel.swift in Sources */,
 				476A111E2A664C6B0021AA5F /* EmptyTaskView.swift in Sources */,
+				476A11362A6B7B2B0021AA5F /* TabBarControllerHelper.swift in Sources */,
 				476A11302A6A2DDD0021AA5F /* InitialLaunchViewController.swift in Sources */,
 				476A11262A675C550021AA5F /* CalendarViewModel.swift in Sources */,
 				476A11122A648F200021AA5F /* Task+CoreDataClass.swift in Sources */,

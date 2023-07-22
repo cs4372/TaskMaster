@@ -10,7 +10,7 @@ import PanModal
 
 class AddTaskViewController: UIViewController {
     weak var delegate: AddTaskViewDelegate?
-    var addTaskViewModel: AddTaskViewModel
+    private var addTaskViewModel: AddTaskViewModel
     
     init(viewModel: AddTaskViewModel) {
         self.addTaskViewModel = viewModel
@@ -43,10 +43,7 @@ class AddTaskViewController: UIViewController {
         textField.isUserInteractionEnabled = true
         textField.borderStyle = .roundedRect
         textField.layer.cornerRadius = 8
-        textField.leftViewMode = .always
         textField.clearButtonMode = .whileEditing
-        textField.autocapitalizationType = .none
-        textField.autocorrectionType = .no
         textField.returnKeyType = .done
         return textField
     }()
@@ -74,7 +71,9 @@ class AddTaskViewController: UIViewController {
     }()
     
     override func viewDidLoad() {
-        self.view.backgroundColor = .white
+        searchTextField.delegate = self
+
+        self.view.backgroundColor = .systemBackground
         setupLayout()
         if let editTask = addTaskViewModel.editTask {
             dueDatePicker.date = editTask.dueDate!
@@ -115,10 +114,12 @@ class AddTaskViewController: UIViewController {
       }
 }
 
+// MARK: Set text limit in searchField
+
 extension AddTaskViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let newText = (textField.text as NSString?)?.replacingCharacters(in: range, with: string) ?? string
-        return newText.count <= 30
+        return newText.count <= 40
     }
 }
 

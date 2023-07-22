@@ -15,8 +15,7 @@ class TaskViewController: UIViewController {
          case list
      }
      
-    var displayMode: DisplayMode = .collection
-    
+    private var displayMode: DisplayMode = .collection
     private var taskViewModel: TaskViewModel!
     private var addTaskViewModel: AddTaskViewModel!
     
@@ -117,7 +116,7 @@ class TaskViewController: UIViewController {
     }()
     
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
 
         rootStackView.translatesAutoresizingMaskIntoConstraints = false
         rootStackView.axis = .vertical
@@ -189,8 +188,6 @@ class TaskViewController: UIViewController {
         
         let context = appDelegate.persistentContainer.viewContext
         let addTaskViewModel = AddTaskViewModel(context: context)
-        addTaskViewModel.delegate = self
-
         let addTaskViewController = AddTaskViewController(viewModel: addTaskViewModel)
          
          presentPanModal(addTaskViewController)
@@ -213,6 +210,8 @@ class TaskViewController: UIViewController {
         tableView.isHidden = displayMode == .collection
     }
 }
+
+// MARK: UICollectionViewDataSource
 
 extension TaskViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -244,11 +243,14 @@ extension TaskViewController: UICollectionViewDataSource {
       }
 }
 
+// MARK: UICollectionViewDelegateFlowLayout
+
 extension TaskViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 180, height: 200)
     }
 }
+// MARK: UITableViewDataSource
 
 extension TaskViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -295,21 +297,10 @@ extension TaskViewController: UITableViewDelegate {
     }
 }
 
-extension TaskViewController: AddTaskViewDelegate {
+extension TaskViewController {
     func didAddTask(_ task: Task) {
         taskViewModel.addTask(newTask: task)
         taskViewModel.saveTasks()
-    }
-    
-    func didEditTask(_ task: Task) {
-        return
-    }
-    
-    func didSaveTask(_ task: Task) {
-//        taskViewModel.addTask(newTask: task)
-//        taskViewModel.saveTasks()
-//        collectionView.reloadData()
-////        tableView.reloadData()
     }
 }
 

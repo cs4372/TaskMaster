@@ -33,6 +33,8 @@ class InitialLaunchViewController: UIViewController {
         label.textColor = .blue
         label.font = UIFont(name: "Futura", size: 30)
         label.text = "Welcome to Task Master!"
+        label.textColor = FlatWatermelon()
+
         return label
     }()
     
@@ -73,8 +75,6 @@ class InitialLaunchViewController: UIViewController {
     }()
 
     private func setupUI() {
-        view.backgroundColor = .white
-        
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textAlignment = .center
         
@@ -84,6 +84,8 @@ class InitialLaunchViewController: UIViewController {
      }
     
     private func setupLayout() {
+        view.backgroundColor = .systemBackground
+
         view.addSubview(titleLabel)
         view.addSubview(textFieldStack)
         textFieldStack.addArrangedSubview(nameTextField)
@@ -112,10 +114,11 @@ class InitialLaunchViewController: UIViewController {
     }
     
     private func navigateToTaskViewController() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let context = appDelegate.persistentContainer.viewContext
-        let taskViewModel = TaskViewModel(context: context)
-        let taskVC = TaskViewController(taskViewModel: taskViewModel)
-        navigationController?.pushViewController(taskVC, animated: true)
-    }
+        let tabBarController = createTabBarController()
+        
+         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+            let window = windowScene.windows.first {
+             window.rootViewController = tabBarController
+         }
+     }
 }

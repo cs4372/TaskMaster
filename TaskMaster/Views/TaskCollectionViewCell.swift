@@ -31,6 +31,7 @@ class TaskCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 21, weight: .regular)
+        label.numberOfLines = 0
         return label
     }()
     
@@ -60,7 +61,7 @@ class TaskCollectionViewCell: UICollectionViewCell {
     private func setupUI() {
         
         LabelsStackView.axis = .vertical
-        LabelsStackView.spacing = 1
+        LabelsStackView.spacing = 4
         LabelsStackView.alignment = .leading
     
         contentView.layer.cornerRadius = 10
@@ -79,7 +80,8 @@ class TaskCollectionViewCell: UICollectionViewCell {
             contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: checkboxButton.trailingAnchor, multiplier: 2),
             
             LabelsStackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            LabelsStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: contentView.leadingAnchor, multiplier: 2)
+            LabelsStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: contentView.leadingAnchor, multiplier: 2),
+            contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: LabelsStackView.trailingAnchor, multiplier: 2),
         ])
     }
     

@@ -16,9 +16,8 @@ protocol AddTaskViewDelegate: AnyObject {
 
 class AddTaskViewModel {
     
-    var editTask: Task?
     weak var delegate: AddTaskViewDelegate?
-    
+    var editTask: Task?
     private let context: NSManagedObjectContext
     
     init(context: NSManagedObjectContext) {

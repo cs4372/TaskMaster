@@ -24,7 +24,6 @@ class CompletedTasksViewModel {
     func completedTasksChange() {
         loadTasks()
         let count = completedTasks.count
-        print("count ==>", count)
         delegate?.completedTasksDidUpdate(count: count)
     }
     
@@ -100,7 +99,6 @@ class CompletedTasksViewModel {
                 self.context.delete(deleteItem)
                 completedTasks.remove(at: indexPath.row)
                 self.saveTasks()
-                //                self.collectionView.reloadData()
                 delegate?.reloadData()
                 completedTasksChange()
         }

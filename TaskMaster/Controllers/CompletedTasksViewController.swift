@@ -13,11 +13,8 @@ class CompletedTasksViewController: UIViewController, CompletedTasksViewModelDel
     private let collectionCellReuseIdentifier = "collectionCell"
 
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-        
-        view.backgroundColor = .white
-        
+                
         self.completedTasksViewModel.delegate = self
         
         setupCollectionView()
@@ -41,13 +38,17 @@ class CompletedTasksViewController: UIViewController, CompletedTasksViewModelDel
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-//        tapGesture.cancelsTouchesInView = false
-//        view.addGestureRecognizer(tapGesture)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
         
         completedTasksViewModel.loadTasks()
         completedTasksViewModel.completedTasksChange()
         collectionView.reloadData()
+    }
+    
+    @objc func handleTap(_ gesture: UITapGestureRecognizer) {
+        searchBar.resignFirstResponder()
     }
     
     private func setupCollectionView() {
@@ -68,6 +69,7 @@ class CompletedTasksViewController: UIViewController, CompletedTasksViewModelDel
         label.textColor = .blue
         label.font = UIFont(name: "Futura", size: 25)
         label.text = "You completed 0 tasks"
+        label.textColor = .systemBlue
         return label
     }()
     
@@ -81,6 +83,8 @@ class CompletedTasksViewController: UIViewController, CompletedTasksViewModelDel
     }()
     
     private func setupLayout() {
+        view.backgroundColor = .systemBackground
+
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         completedTasksLabel.translatesAutoresizingMaskIntoConstraints = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -112,7 +116,11 @@ class CompletedTasksViewController: UIViewController, CompletedTasksViewModelDel
     func completedTasksDidUpdate(count: Int) {
         collectionView.reloadData()
         DispatchQueue.main.async {
-            self.completedTasksLabel.text = "You completed \(count) tasks!"
+            if count == 1 {
+                self.completedTasksLabel.text = "You completed \(count) task!"
+            } else {
+                self.completedTasksLabel.text = "You completed \(count) tasks!"
+            }
         }
     }
 }
@@ -149,7 +157,7 @@ extension CompletedTasksViewController: UISearchBarDelegate {
 extension CompletedTasksViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if completedTasksViewModel.completedTasks.count == 0 {
-            collectionView.setEmptyView(title: "You don't have any tasks yet!", message: "Click the + button to add some tasks")
+            collectionView.setEmptyView(title: "You don't have any tasks yet!", message: "Go back to Tasks to add some tasks")
         } else {
             collectionView.restore()
         }

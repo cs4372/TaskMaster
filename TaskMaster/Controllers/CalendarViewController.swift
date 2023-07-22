@@ -9,8 +9,7 @@ import UIKit
 import FSCalendar
 
 class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendarDelegate {
-        
-    var calendarViewModel: CalendarViewModel
+    private var calendarViewModel: CalendarViewModel
     
     init(calendarViewModel: CalendarViewModel) {
         self.calendarViewModel = calendarViewModel
@@ -38,12 +37,11 @@ class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendar
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .white
-        
+                
         calendarViewModel.reloadData()
         tableView.reloadData()
         calendarView.reloadData()
+        calendarView.appearance.titleDefaultColor = UIColor(named: "CalenderDateColor")
         setupLayout()
     }
     
@@ -56,6 +54,8 @@ class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendar
     }
     
     private func setupLayout() {
+        view.backgroundColor = .systemBackground
+        
         calendarView.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -87,6 +87,7 @@ class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendar
     }
 }
 
+// MARK: - UITableViewDataSource
 
 extension CalendarViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -101,6 +102,16 @@ extension CalendarViewController: UITableViewDataSource {
         }
         return cell
     }
+}
+
+extension CalendarViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+         return 50.0
+     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+    }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if calendarViewModel.selectedTasks == nil {
@@ -112,8 +123,3 @@ extension CalendarViewController: UITableViewDataSource {
         return nil
     }
 }
-
-extension CalendarViewController: UITableViewDelegate {
-
-}
-

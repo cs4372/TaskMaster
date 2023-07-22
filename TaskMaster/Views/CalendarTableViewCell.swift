@@ -11,7 +11,7 @@ class CalendarTableViewCell: UITableViewCell {
     
     let taskLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .blue
+        label.textColor = .systemBlue
         label.font = UIFont.systemFont(ofSize: 21, weight: .regular)
         return label
     }()
